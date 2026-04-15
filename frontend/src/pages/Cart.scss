@@ -1,0 +1,123 @@
+.cart {
+  display: flex;
+  padding: 20px;
+  background-color: white;
+  min-height: max-content;
+
+  &__left {
+    flex: 1;
+  }
+
+  &__ad {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  &__title {
+    margin-right: 10px;
+    padding: 10px;
+    border-bottom: 1px solid lightgray;
+    font-size: 28px;
+    font-weight: 400;
+  }
+
+  &__right {
+    margin-left: 20px;
+  }
+}
+
+.cartItem {
+  display: flex;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+  
+  &__image {
+    object-fit: contain;
+    width: 180px;
+    height: 180px;
+  }
+
+  &__info {
+    padding-left: 20px;
+    flex: 1;
+  }
+
+  &__title {
+    font-size: 17px;
+    font-weight: 500;
+  }
+
+  &__price {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 5px;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+
+    .cartItem__qtyLabel {
+      margin-right: 5px;
+      font-size: 13px;
+    }
+
+    select {
+      padding: 3px;
+      border-radius: 5px;
+      border: 1px solid var(--border-grey);
+      background-color: #f0f2f2;
+      box-shadow: 0 2px 5px rgba(15,17,17,.15);
+      margin-right: 15px;
+      cursor: pointer;
+    }
+
+    .cartItem__removeBtn {
+      background: none;
+      border: none;
+      color: #007185;
+      cursor: pointer;
+      font-size: 12px;
+
+      &:hover {
+        text-decoration: underline;
+        color: #c45500;
+      }
+    }
+  }
+}
+
+.subtotal {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 300px;
+  height: 150px;
+  padding: 20px;
+  background-color: #f3f3f3;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+
+  &__gift {
+    display: flex;
+    align-items: center;
+
+    input {
+      margin-right: 5px;
+    }
+  }
+
+  button {
+    background: #f0c14b;
+    border-radius: 2px;
+    width: 100%;
+    height: 30px;
+    border: 1px solid;
+    margin-top: 10px;
+    border-color: #a88734 #9c7e31 #846a29;
+    color: #111;
+  }
+}

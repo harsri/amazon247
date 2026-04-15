@@ -1,0 +1,88 @@
+:root {
+  /* Amazon-inspired colors */
+  --amazon-blue: #232f3e;
+  --amazon-light-blue: #37475a;
+  --amazon-orange: #f90;
+  --amazon-orange-hover: #e38a00;
+  --amazon-yellow: #f0c14b;
+  --amazon-yellow-hover: #ddb347;
+  --amazon-bg: #eaeded;
+  --text-dark: #0f1111;
+  --text-light: #ffffff;
+  --border-grey: #cccccc;
+  
+  --font-family: 'Inter', 'Amazon Ember', Arial, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--amazon-bg);
+  color: var(--text-dark);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+/* Utilities */
+.btn-primary {
+  background-color: var(--amazon-yellow);
+  border: 1px solid #a88734;
+  border-radius: 4px;
+  padding: 8px 20px;
+  color: #111;
+  font-weight: 500;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4) inset;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: var(--amazon-yellow-hover);
+  }
+}
+
+.btn-secondary {
+  background-color: var(--amazon-orange);
+  border: 1px solid #a88734;
+  border-radius: 4px;
+  padding: 8px 20px;
+  color: #111;
+  font-weight: 500;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4) inset;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: var(--amazon-orange-hover);
+  }
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
