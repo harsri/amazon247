@@ -66,47 +66,35 @@
     p { margin-bottom: 12px; color: #555; }
   }
 
-  &__addressList { display: flex; flex-direction: column; gap: 12px; }
+  &__addressList { display: flex; flex-direction: column; }
 
-  &__addressCard {
+  &__addressRow {
     display: flex;
     gap: 12px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 14px;
+    padding: 10px 0;
     cursor: pointer;
-    transition: border 0.2s;
 
-    input[type="radio"] { margin-top: 3px; flex-shrink: 0; accent-color: #f90; }
-
-    &.selected { border-color: #f90; background: #fffbf2; }
-    &:hover { border-color: #f90; }
+    input[type="radio"] { margin-top: 4px; accent-color: #007185; }
+    
+    &.selected { background: #fffcf4; border-radius: 4px; border: 1px solid #fbd8b4; box-shadow: inset 0 0 0 1px #fbd8b4; padding: 10px; margin-left: -10px; margin-right: -10px; }
   }
 
-  &__addressInfo { flex: 1; font-size: 14px; line-height: 1.6; }
-
-  &__addressTop {
-    display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
-    strong { font-size: 15px; }
+  &__addAddressRow {
+    display: flex; gap: 12px; padding: 10px 0; align-items: center; border-top: 1px solid #eee; margin-top: 8px;
+    input { margin-top: 0; }
   }
 
-  &__addrType {
-    font-size: 11px;
-    background: #eee;
-    padding: 2px 7px;
-    border-radius: 10px;
-    text-transform: uppercase;
-    font-weight: 600;
-    color: #555;
+  &__addLink { font-size: 14px; font-weight: 700; color: #111; text-decoration: none; cursor: pointer; &:hover { color: #c45500; text-decoration: underline; } }
+
+  &__addressInfo { 
+    flex: 1; font-size: 14px; line-height: 1.5; color: #0f1111;
+    strong { font-weight: 700; margin-right: 4px; }
   }
 
-  &__defaultBadge {
-    font-size: 11px;
-    background: #f90;
-    color: white;
-    padding: 2px 7px;
-    border-radius: 10px;
-    font-weight: 600;
+  &__addressLinks {
+    margin-top: 4px;
+    a { color: #007185; text-decoration: none; font-size: 13px; }
+    a:hover { color: #c45500; text-decoration: underline; }
   }
 
   &__items { display: flex; flex-direction: column; gap: 16px; }

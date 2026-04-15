@@ -90,23 +90,22 @@ const Checkout = () => {
                 </div>
               ) : (
                 <div className="checkout__addressList">
-                  {addresses.map(addr => (
-                    <label key={addr.id} className={`checkout__addressCard ${selectedAddressId === addr.id ? 'selected' : ''}`}>
+                  {addresses.map((addr, index) => (
+                    <label key={addr.id} className={`checkout__addressRow ${selectedAddressId === addr.id ? 'selected' : ''}`}>
                       <input type="radio" name="address" value={addr.id} checked={selectedAddressId === addr.id} onChange={() => setSelectedAddressId(addr.id)} />
                       <div className="checkout__addressInfo">
-                        <div className="checkout__addressTop">
-                          <strong>{addr.fullName}</strong>
-                          <span className="checkout__addrType">{addr.addressType}</span>
-                          {addr.isDefault && <span className="checkout__defaultBadge">Default</span>}
+                        <strong>{addr.fullName}</strong>
+                        {addr.addressLine1}, {addr.city}, {addr.state}, {addr.pincode}, India <br />
+                        Phone number: {addr.phone}
+                        <div className="checkout__addressLinks">
+                          <Link to="/addresses">Edit address</Link> | <Link to="/addresses">Add delivery instructions</Link>
                         </div>
-                        <p>{addr.houseNo}, {addr.addressLine1}</p>
-                        {addr.addressLine2 && <p>{addr.addressLine2}</p>}
-                        {addr.landmark && <p>Near: {addr.landmark}</p>}
-                        <p>{addr.city}, {addr.state} — {addr.pincode}</p>
-                        <p>📞 {addr.phone}</p>
                       </div>
                     </label>
                   ))}
+                  <div className="checkout__addAddressRow">
+                    <input type="radio" disabled /> <Link to="/addresses" className="checkout__addLink">Add a new address</Link>
+                  </div>
                 </div>
               )}
             </div>

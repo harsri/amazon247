@@ -21,11 +21,28 @@ const SORT_OPTIONS = [
   { label: 'Avg. Customer Review', value: 'rating_desc' },
 ];
 
+const CAROUSEL_IMAGES = [
+  'https://images-eu.ssl-images-amazon.com/images/G/31/img22/Wireless/devjyoti/PD23/Launches/Updated_ingress1242x450_3.gif',
+  'https://images-eu.ssl-images-amazon.com/images/G/31/img22/Toys/GW/GW-Hero-PC_BBAug23_Soft-toys_with-Apay_Lifestyle_2x._CB596817009_.jpg',
+  'https://images-eu.ssl-images-amazon.com/images/G/31/img20/AmazonBrands/GW/2-1a_1500x600._CB531065467_.jpg',
+  'https://images-eu.ssl-images-amazon.com/images/G/31/img23/Fashion/GW/Aug/Apay/Deals-3000-PC._CB596825701_.jpg'
+];
+
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   const [showFilters, setShowFilters] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % CAROUSEL_IMAGES.length);
+  const prevSlide = () => setCurrentSlide((prev) => (prev === 0 ? CAROUSEL_IMAGES.length - 1 : prev - 1));
+
+  useEffect(() => {
+    // Autoplay carousel
+    const slideInterval = setInterval(nextSlide, 5000);
+    return () => clearInterval(slideInterval);
+  }, []);
 
   const search = searchParams.get('search') || '';
   const category = searchParams.get('category') || '';
@@ -63,13 +80,16 @@ const Home = () => {
 
   return (
     <div className="home">
-      {/* Hero Banner (only on home without search) */}
+      {/* Hero Banner Carousel (only on home without search) */}
       {!isSearchActive && (
-        <div className="home__hero">
-          <div className="home__heroOverlay">
-            <h1>Great Indian Shopping Festival</h1>
-            <p>Discover deals across categories. Free delivery on orders above ₹999.</p>
+        <div className="home__carousel">
+          <button className="home__carouselBtn prev" onClick={prevSlide}>&#10094;</button>
+          <div className="home__carouselTrack" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
+            {CAROUSEL_IMAGES.map((img, i) => (
+              <img key={i} src={img} alt={`Banner ${i + 1}`} className="home__carouselImg" />
+            ))}
           </div>
+          <button className="home__carouselBtn next" onClick={nextSlide}>&#10095;</button>
         </div>
       )}
 

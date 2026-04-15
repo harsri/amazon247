@@ -122,11 +122,23 @@
     padding: 0 12px; gap: 0; white-space: nowrap;
   }
   &__item {
-    padding: 8px 12px; color: #ddd; font-size: 13px;
+    padding: 8px 12px; color: #fff; font-size: 13px; font-weight: 500;
     text-decoration: none; cursor: pointer;
     border: 1px solid transparent; border-radius: 2px;
     transition: border 0.15s;
     &:hover { border-color: white; color: white; }
+  }
+  &__menu {
+    display: flex; align-items: center; gap: 4px; padding: 6px 12px; font-size: 14px; font-weight: 700;
+  }
+  &__rufus {
+    display: flex; align-items: center; gap: 6px; padding: 4px 12px; margin: 0 8px;
+    background: white; color: black; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer;
+    &:hover { opacity: 0.9; }
+  }
+  &__rufusIcon {
+    width: 14px; height: 14px; background: linear-gradient(135deg, #f90, #c45500);
+    border-radius: 50%;
   }
 }
 

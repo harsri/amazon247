@@ -1,6 +1,6 @@
 import React, { useContext, useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FiSearch, FiShoppingCart, FiChevronDown, FiMapPin, FiPackage, FiHeart, FiHelpCircle, FiLogOut, FiBookOpen, FiUser } from 'react-icons/fi';
+import { FiSearch, FiShoppingCart, FiChevronDown, FiMapPin, FiPackage, FiHeart, FiHelpCircle, FiLogOut, FiBookOpen, FiUser, FiMenu } from 'react-icons/fi';
 import { AuthContext } from '../context/AuthContext';
 import { CartContext } from '../context/CartContext';
 import { WishlistContext } from '../context/WishlistContext';
@@ -123,13 +123,20 @@ const Navbar = () => {
       {/* Sub Navbar */}
       <div className="subNavbar">
         <div className="subNavbar__items">
-          <Link to="/" className="subNavbar__item">All</Link>
-          <Link to="/?category=Electronics" className="subNavbar__item">Electronics</Link>
-          <Link to="/?category=Fashion" className="subNavbar__item">Fashion</Link>
-          <Link to="/?category=Books" className="subNavbar__item">Books</Link>
-          <Link to="/?category=Home%20%26%20Kitchen" className="subNavbar__item">Home & Kitchen</Link>
+          <div className="subNavbar__item subNavbar__menu">
+            <FiMenu size={18} />
+            <span>All</span>
+          </div>
+          <div className="subNavbar__rufus">
+            <div className="subNavbar__rufusIcon"></div>
+            <span>Rufus</span>
+          </div>
+          <span className="subNavbar__item">MX Player</span>
+          <span className="subNavbar__item">Sell</span>
+          <span className="subNavbar__item">Gift Cards</span>
           <span className="subNavbar__item">Amazon Pay</span>
           <span className="subNavbar__item">Gift Ideas</span>
+          <span className="subNavbar__item">Buy Again</span>
           <span className="subNavbar__item">Amazon Basics</span>
           <span className="subNavbar__item">Prime</span>
           <span className="subNavbar__item">Today's Deals</span>
