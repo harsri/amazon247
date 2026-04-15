@@ -3,25 +3,21 @@ const prisma = new PrismaClient();
 
 const submitTicket = async (req, res) => {
   try {
-    const { subject, message } = req.body;
+    const { subject, message, category } = req.body;
     const userId = req.userId;
 
     if (!subject || !message) {
-      return res.status(400).json({ error: "Subject and message are required." });
+      return res.status(400).json({ error: 'Subject and message are required.' });
     }
 
     const ticket = await prisma.supportTicket.create({
-      data: {
-        userId,
-        subject,
-        message
-      }
+      data: { userId, subject, message, category: category || 'Other' }
     });
 
-    res.status(201).json({ message: "Support ticket submitted successfully", ticket });
+    res.status(201).json({ message: 'Support ticket submitted successfully', ticket });
   } catch (error) {
-    console.error("Submit Ticket Error:", error);
-    res.status(500).json({ error: "Internal server error." });
+    console.error('Submit Ticket Error:', error);
+    res.status(500).json({ error: 'Internal server error.' });
   }
 };
 

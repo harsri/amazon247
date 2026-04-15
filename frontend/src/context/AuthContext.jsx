@@ -6,22 +6,21 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [token, setToken] = useState(localStorage.getItem('token') || null);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      if (!token) {
-        setLoading(false);
-        return;
-      }
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setLoading(false);
+      return;
+    }
 
+    const fetchUser = async () => {
       try {
         const response = await api.get('/auth/me');
         setUser(response.data.user);
       } catch (error) {
-        console.error('Failed to fetch user:', error);
+        // Token invalid or expired — clear it silently
         localStorage.removeItem('token');
-        setToken(null);
         setUser(null);
       } finally {
         setLoading(false);
@@ -29,40 +28,35 @@ export const AuthProvider = ({ children }) => {
     };
 
     fetchUser();
-  }, [token]);
+  }, []);
 
   const login = async (email, password) => {
     const response = await api.post('/auth/login', { email, password });
     if (response.data.token) {
       localStorage.setItem('token', response.data.token);
-      setToken(response.data.token);
       setUser(response.data.user);
     }
+    return response;
   };
 
   const register = async (name, email, password) => {
     const response = await api.post('/auth/register', { name, email, password });
     if (response.data.token) {
       localStorage.setItem('token', response.data.token);
-      setToken(response.data.token);
       setUser(response.data.user);
     }
+    return response;
   };
 
   const logout = () => {
     localStorage.removeItem('token');
-    setToken(null);
     setUser(null);
   };
 
-  const updateAddress = async (address) => {
-    const response = await api.put('/auth/address', { address });
-    setUser(response.data.user);
-  };
-
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, token, updateAddress }}>
-      {!loading && children}
+    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+      {/* Always render children — don't block on loading */}
+      {children}
     </AuthContext.Provider>
   );
 };

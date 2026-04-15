@@ -14,7 +14,7 @@ const getWishlist = async (req, res) => {
       }
     });
 
-    res.status(200).json({ wishlist });
+    res.status(200).json({ wishlistItems: wishlist });
   } catch (error) {
     console.error("Get Wishlist Error:", error);
     res.status(500).json({ error: "Internal server error." });

@@ -1,83 +1,139 @@
 .orders {
-  padding: 20px 40px;
-  background-color: white;
+  padding: 24px 40px;
+  background: #f3f3f3;
   min-height: 80vh;
 
-  h1 {
-    font-weight: 400;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid lightgray;
-  }
+  h1 { font-size: 24px; font-weight: 500; margin-bottom: 20px; }
+  &__empty { text-align: center; padding: 60px; background: white; border-radius: 8px; p { font-size: 18px; color: #555; } }
+  &__list { display: flex; flex-direction: column; gap: 16px; }
 }
 
 .order {
-  border: 1px solid lightgray;
-  border-radius: 4px;
-  margin-bottom: 20px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
 
   &__header {
-    background-color: #f3f3f3;
-    padding: 15px 20px;
+    background: #f7f7f7;
+    padding: 14px 20px;
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid lightgray;
-    border-radius: 4px 4px 0 0;
-
-    div {
-      p:first-child {
-        font-size: 12px;
-        color: #565959;
-      }
-      p:last-child {
-        font-size: 14px;
-      }
-    }
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 14px;
   }
 
-  &__headerRight {
-    text-align: right;
+  &__label { font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase; margin-bottom: 4px; }
 
-    .order__status {
-      font-weight: bold;
-      color: #007600;
-    }
+  &__headerRight { text-align: right; }
+  &__id { font-size: 12px; color: #555; margin-bottom: 6px; }
+
+  &__detailToggle {
+    background: none; border: 1px solid #adb1b8; border-radius: 4px;
+    padding: 4px 10px; font-size: 12px; cursor: pointer;
+    &:hover { background: #f0f2f2; }
   }
 
-  &__items {
+  &__expanded {
     padding: 20px;
+    border-top: 1px solid #eee;
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 20px;
+
+    @media (max-width: 700px) { grid-template-columns: 1fr; }
+  }
+
+  &__items { display: flex; flex-direction: column; gap: 12px; }
+
+  &__breakdown {
+    background: #f9f9f9; border-radius: 6px; padding: 16px;
+    font-size: 13px;
+    height: fit-content;
+    border: 1px solid #eee;
+  }
+  &__breakdownRow { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #eee;
+    &:last-child { border: none; }
+  }
+  &__breakdownTotal { font-size: 15px; font-weight: 600; padding-top: 10px; }
+
+  &__address {
+    grid-column: 1 / -1;
+    background: #fffaef;
+    border: 1px solid #f0e0a0;
+    border-radius: 6px;
+    padding: 14px;
+    font-size: 13px;
+    h4 { margin-bottom: 8px; font-size: 14px; }
+    p { margin-bottom: 3px; }
+  }
+
+  &__returnBtn {
+    grid-column: 1 / -1;
+    background: #fff;
+    border: 1px solid #c45500;
+    color: #c45500;
+    padding: 8px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    width: fit-content;
+    &:hover { background: #c45500; color: white; }
+  }
+}
+
+.statusTimeline {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  background: white;
+  flex-wrap: wrap;
+  gap: 0;
+
+  &__step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #aaa;
+    text-transform: uppercase;
+    font-weight: 600;
+    min-width: 70px;
+
+    &.done { color: #007600; .statusTimeline__dot { background: #007600; border-color: #007600; } }
+    &.current { color: #f90; .statusTimeline__dot { background: #f90; border-color: #f90; box-shadow: 0 0 0 3px rgba(255,153,0,0.2); } }
+  }
+
+  &__dot {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    background: white;
+  }
+
+  &__line {
+    flex: 1; height: 2px; background: #ddd; min-width: 20px; margin-bottom: 22px;
+    &.done { background: #007600; }
+  }
+
+  &__return {
+    padding: 8px 16px;
+    background: #fff3e0;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #c45500;
   }
 }
 
 .orderItem {
-  display: flex;
-  margin-bottom: 15px;
-
-  img {
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
-  }
-
-  &__info {
-    margin-left: 20px;
-  }
-
-  &__title {
-    font-weight: 500;
-    margin-bottom: 5px;
-    color: #007185;
-    cursor: pointer;
-
-    &:hover {
-      text-decoration: underline;
-      color: #c45500;
-    }
-  }
-
-  &__price {
-    font-weight: bold;
-    color: #B12704;
-    margin-bottom: 5px;
-  }
+  display: flex; gap: 12px;
+  img { width: 70px; height: 70px; object-fit: contain; border: 1px solid #eee; border-radius: 4px; }
+  &__info { flex: 1; }
+  &__title { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  &__price { font-size: 13px; color: #555; }
 }

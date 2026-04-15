@@ -4,48 +4,54 @@ import { WishlistContext } from '../context/WishlistContext';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { FiHeart } from 'react-icons/fi';
+import { FaHeart, FaStar } from 'react-icons/fa';
 import './ProductCard.scss';
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useContext(CartContext);
-  const { addToWishlist } = useContext(WishlistContext);
+  const { addToWishlist, wishlistItems } = useContext(WishlistContext);
 
-  const handleAddToCart = () => {
+  const isWishlisted = wishlistItems.some(w => w.productId === product.id);
+
+  const handleAddToCart = (e) => {
+    e.preventDefault();
     addToCart(product.id, 1);
-    toast.success(`${product.title} added to cart!`);
+    toast.success(`Added to cart!`, { autoClose: 1500 });
+  };
+
+  const handleWishlist = (e) => {
+    e.preventDefault();
+    addToWishlist(product.id);
   };
 
   return (
-    <div className="productCard">
-      <div className="productCard__actionsOverlay">
-         <FiHeart className="productCard__wishlistIcon" onClick={() => addToWishlist(product.id)} title="Add to Wishlist" />
-      </div>
-      <div className="productCard__info">
-        <Link to={`/product/${product.id}`} className="productCard__link">
-          <p className="productCard__title">{product.title}</p>
-        </Link>
-        <p className="productCard__price">
-          <small>$</small>
-          <strong>{product.price}</strong>
-        </p>
-        <div className="productCard__rating">
-          {Array(Math.floor(product.ratings))
-            .fill()
-            .map((_, i) => (
-              <p key={i}>🌟</p>
-            ))}
-        </div>
-      </div>
-      <Link to={`/product/${product.id}`} className="productCard__link">
+    <Link to={`/product/${product.id}`} className="productCard">
+      <button className={`productCard__heart ${isWishlisted ? 'wishlisted' : ''}`} onClick={handleWishlist} title={isWishlisted ? 'Wishlisted' : 'Add to Wishlist'}>
+        {isWishlisted ? <FaHeart /> : <FiHeart />}
+      </button>
+
+      <div className="productCard__imgWrap">
         <img
-          src={product.images?.[0]?.url || 'https://via.placeholder.com/300x300.png?text=Product+Image'}
+          src={product.images?.[0]?.url || 'https://via.placeholder.com/280x280?text=Product'}
           alt={product.title}
         />
-      </Link>
-      <button className="btn-primary" onClick={handleAddToCart}>
+      </div>
+
+      <div className="productCard__info">
+        {product.brand && <p className="productCard__brand">{product.brand}</p>}
+        <p className="productCard__title">{product.title}</p>
+        <div className="productCard__rating">
+          <FaStar className="productCard__ratingStar" />
+          <span>{product.ratings?.toFixed(1)}</span>
+          <span className="productCard__ratingCount">({product.ratingCount?.toLocaleString()})</span>
+        </div>
+        <p className="productCard__price">₹<strong>{product.price?.toFixed(2)}</strong></p>
+      </div>
+
+      <button className="productCard__cartBtn btn-primary" onClick={handleAddToCart}>
         Add to Cart
       </button>
-    </div>
+    </Link>
   );
 };
 

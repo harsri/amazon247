@@ -8,11 +8,15 @@ const getProducts = async (req, res) => {
     const whereClause = {};
 
     if (category) {
-      whereClause.category = { name: category };
+      whereClause.category = { name: { contains: category } };
     }
 
     if (search) {
-      whereClause.title = { contains: search };
+      whereClause.OR = [
+        { title: { contains: search } },
+        { description: { contains: search } },
+        { brand: { contains: search } }
+      ];
     }
 
     if (minPrice || maxPrice) {

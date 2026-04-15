@@ -9,76 +9,121 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
-  
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
   const { login, register } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   const from = location.state?.from?.pathname || '/';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+    setLoading(true);
     try {
       if (isLogin) {
         await login(email, password);
-        toast.success("Successfully logged in.");
+        toast.success('Welcome back!');
       } else {
+        if (password.length < 6) {
+          setError('Password must be at least 6 characters.');
+          setLoading(false);
+          return;
+        }
         await register(name, email, password);
-        toast.success("Successfully registered.");
+        toast.success('Account created successfully!');
       }
       navigate(from, { replace: true });
-    } catch (error) {
-      toast.error(error.response?.data?.error || "An error occurred");
+    } catch (err) {
+      const msg = err.response?.data?.error || 'Something went wrong. Please try again.';
+      setError(msg);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const switchMode = () => {
+    setIsLogin(v => !v);
+    setError('');
+    setEmail('');
+    setPassword('');
+    setName('');
   };
 
   return (
     <div className="login">
       <Link to="/">
-        <img
-          className="login__logo"
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/1024px-Amazon_logo.svg.png"
-          alt="Amazon Logo"
-        />
+        <div className="login__logo">🛒 AmazonClone</div>
       </Link>
 
       <div className="login__container">
-        <h1>{isLogin ? 'Sign-in' : 'Create account'}</h1>
+        <h1>{isLogin ? 'Sign in' : 'Create account'}</h1>
+
+        {error && (
+          <div className="login__error">
+            <span>⚠️</span> {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit}>
           {!isLogin && (
-            <>
-              <h5>Your name</h5>
-              <input type="text" value={name} onChange={e => setName(e.target.value)} required />
-            </>
+            <div className="login__field">
+              <label>Your name</label>
+              <input
+                type="text"
+                value={name}
+                onChange={e => setName(e.target.value)}
+                required
+                placeholder="First and last name"
+                autoComplete="name"
+              />
+            </div>
           )}
-          <h5>E-mail</h5>
-          <input type="email" value={email} onChange={e => setEmail(e.target.value)} required />
 
-          <h5>Password</h5>
-          <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+          <div className="login__field">
+            <label>Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              required
+              placeholder="you@example.com"
+              autoComplete="email"
+            />
+          </div>
 
-          <button type="submit" className="login__signInButton btn-primary">
-            {isLogin ? 'Sign In' : 'Create your Amazon account'}
+          <div className="login__field">
+            <label>Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              required
+              placeholder={isLogin ? 'Enter your password' : 'At least 6 characters'}
+              autoComplete={isLogin ? 'current-password' : 'new-password'}
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="login__signInButton"
+            disabled={loading}
+          >
+            {loading ? (isLogin ? 'Signing in...' : 'Creating account...') : (isLogin ? 'Sign In' : 'Create your Amazon account')}
           </button>
         </form>
 
-        <p>
-          By signing-in you agree to AmazonClone's Conditions of Use & Sale.
-          Please see our Privacy Notice, our Cookies Notice and our
-          Interest-Based Ads Notice.
+        <p className="login__terms">
+          By continuing, you agree to AmazonClone's Conditions of Use and Privacy Notice.
         </p>
 
-        {isLogin && (
-          <button onClick={() => setIsLogin(false)} className="login__registerButton">
-            Create your Amazon account
-          </button>
-        )}
-        {!isLogin && (
-          <div style={{marginTop: '15px'}}>
-            Already have an account? <span style={{color: 'blue', cursor: 'pointer'}} onClick={() => setIsLogin(true)}>Sign in</span>
-          </div>
-        )}
+        <div className="login__divider"><span>New to AmazonClone?</span></div>
+
+        <button className="login__registerButton" onClick={switchMode} type="button">
+          {isLogin ? 'Create your Amazon account' : '← Back to Sign In'}
+        </button>
       </div>
     </div>
   );

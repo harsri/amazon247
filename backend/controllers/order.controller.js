@@ -1,76 +1,76 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
+const DELIVERY_CHARGE = 49;
+const TAX_RATE = 0.18; // 18% GST
+const FREE_DELIVERY_THRESHOLD = 999;
+
 const placeOrder = async (req, res) => {
-  const { address, paymentMethod } = req.body;
+  const { addressId, paymentMethod } = req.body;
   const userId = req.userId;
 
-  if (!address || !paymentMethod) {
-    return res.status(400).json({ error: "Address and payment method are required." });
+  if (!addressId) {
+    return res.status(400).json({ error: 'Please select a delivery address.' });
   }
 
   try {
     const result = await prisma.$transaction(async (tx) => {
-      // 1. Get user's cart items
+      // Verify address belongs to user
+      const address = await tx.address.findFirst({ where: { id: parseInt(addressId), userId } });
+      if (!address) throw new Error('Invalid address selected.');
+
+      // Get cart items
       const cartItems = await tx.cartItem.findMany({
         where: { userId },
         include: { product: true }
       });
 
-      if (cartItems.length === 0) {
-        throw new Error("Cart is empty");
-      }
+      if (cartItems.length === 0) throw new Error('Cart is empty.');
 
-      let totalAmount = 0;
-
-      // 2. Validate stock and calculate total
+      let subtotal = 0;
       for (const item of cartItems) {
         if (item.product.stock < item.quantity) {
-          throw new Error(`Product ${item.product.title} is out of stock or insufficient quantity.`);
+          throw new Error(`"${item.product.title}" has insufficient stock.`);
         }
-        totalAmount += item.product.price * item.quantity;
+        subtotal += item.product.price * item.quantity;
       }
 
-      // 3. Create the order
+      const deliveryCharge = subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : DELIVERY_CHARGE;
+      const tax = parseFloat((subtotal * TAX_RATE).toFixed(2));
+      const totalAmount = parseFloat((subtotal + deliveryCharge + tax).toFixed(2));
+
       const order = await tx.order.create({
         data: {
           userId,
+          addressId: parseInt(addressId),
+          subtotal,
+          deliveryCharge,
+          tax,
           totalAmount,
-          address,
-          paymentMethod,
-          status: "PENDING",
+          paymentMethod: paymentMethod || 'COD',
+          status: 'PENDING'
         }
       });
 
-      // 4. Create order items and decrement stock
       for (const item of cartItems) {
         await tx.orderItem.create({
-          data: {
-            orderId: order.id,
-            productId: item.productId,
-            quantity: item.quantity,
-            price: item.product.price
-          }
+          data: { orderId: order.id, productId: item.productId, quantity: item.quantity, price: item.product.price }
         });
-
         await tx.product.update({
           where: { id: item.productId },
           data: { stock: { decrement: item.quantity } }
         });
       }
 
-      // 5. Clear the cart
-      await tx.cartItem.deleteMany({
-        where: { userId }
-      });
+      await tx.cartItem.deleteMany({ where: { userId } });
 
       return order;
     });
 
-    res.status(201).json({ message: "Order placed successfully", order: result });
+    res.status(201).json({ message: 'Order placed successfully!', order: result });
   } catch (error) {
-    console.error("Place Order Error:", error);
-    res.status(400).json({ error: error.message || "Failed to place order." });
+    console.error('Place Order Error:', error);
+    res.status(400).json({ error: error.message || 'Failed to place order.' });
   }
 };
 
@@ -79,23 +79,38 @@ const getOrders = async (req, res) => {
     const orders = await prisma.order.findMany({
       where: { userId: req.userId },
       include: {
+        address: true,
         orderItems: {
           include: {
-             product: true
+            product: { include: { images: true } }
           }
         }
       },
       orderBy: { createdAt: 'desc' }
     });
-
     res.status(200).json({ orders });
   } catch (error) {
-    console.error("Get Orders Error:", error);
-    res.status(500).json({ error: "Internal server error." });
+    console.error('Get Orders Error:', error);
+    res.status(500).json({ error: 'Internal server error.' });
   }
 };
 
-module.exports = {
-  placeOrder,
-  getOrders
+const requestReturn = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const order = await prisma.order.findFirst({ where: { id: parseInt(id), userId: req.userId } });
+    if (!order) return res.status(404).json({ error: 'Order not found.' });
+    if (order.status !== 'DELIVERED') return res.status(400).json({ error: 'Only delivered orders can be returned.' });
+
+    const updated = await prisma.order.update({
+      where: { id: parseInt(id) },
+      data: { status: 'RETURN_REQUESTED' }
+    });
+    res.status(200).json({ message: 'Return request submitted.', order: updated });
+  } catch (error) {
+    console.error('Return Error:', error);
+    res.status(500).json({ error: 'Internal server error.' });
+  }
 };
+
+module.exports = { placeOrder, getOrders, requestReturn };
