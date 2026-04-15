@@ -15,6 +15,7 @@ const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [category, setCategory] = useState('');
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [location, setLocation] = useState({ city: '', pincode: '' });
   const menuRef = useRef(null);
 
@@ -53,11 +54,7 @@ const Navbar = () => {
       <nav className="navbar">
         {/* Logo */}
         <Link to="/" className="navbar__brand">
-          <svg viewBox="0 0 602 182" className="navbar__logo" fill="white" xmlns="http://www.w3.org/2000/svg">
-            <path d="M373.642 141.938c-34.999 26.862-85.763 41.152-129.476 41.152-61.294 0-116.499-22.686-158.243-60.401-3.278-2.965-.341-7.005 3.594-4.702 45.071 26.229 100.795 42.008 158.369 42.008 38.833 0 81.544-8.045 120.871-24.706 5.932-2.521 10.905 3.896 5.885 6.649z"/>
-            <path d="M387.865 125.937c-4.474-5.728-29.58-2.714-40.835-1.367-3.43.417-3.957-2.573-.864-4.729 20.003-14.065 52.822-10.001 56.63-5.291 3.81 4.729-.998 37.544-19.788 53.197-2.886 2.403-5.64 1.123-4.361-2.062 4.229-10.573 13.693-34.013 9.218-39.748z"/>
-            <path d="M348.084 23.134V7.157c0-2.425 1.843-4.04 4.056-4.04h71.775c2.306 0 4.15 1.652 4.15 4.04v13.678c-.038 2.3-1.957 5.31-5.387 9.999l-37.206 53.117c13.826-.339 28.428 1.723 40.949 8.808 2.822 1.6 3.588 3.95 3.803 6.267v17.067c0 2.349-2.59 5.092-5.31 3.671-22.177-11.623-51.629-12.888-76.14.133-2.5 1.345-5.12-1.356-5.12-3.706V99.45c0-2.634.038-7.127 2.67-11.128l43.117-61.82h-37.49c-2.307 0-4.15-1.614-4.15-4.003l-.717.635z"/>
-          </svg>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon" className="navbar__logo" />
           <span className="navbar__brandIn">.in</span>
         </Link>
 
@@ -123,7 +120,7 @@ const Navbar = () => {
       {/* Sub Navbar */}
       <div className="subNavbar">
         <div className="subNavbar__items">
-          <div className="subNavbar__item subNavbar__menu">
+          <div className="subNavbar__item subNavbar__menu" onClick={() => setIsDrawerOpen(true)}>
             <FiMenu size={18} />
             <span>All</span>
           </div>
@@ -141,6 +138,43 @@ const Navbar = () => {
           <span className="subNavbar__item">Prime</span>
           <span className="subNavbar__item">Today's Deals</span>
           <span className="subNavbar__item">New Releases</span>
+        </div>
+        <div className="subNavbar__banner">
+          <strong>Summer Escape Sale</strong> | Shop Now
+        </div>
+      </div>
+
+      {/* Sidebar Drawer */}
+      <div className={`drawerOverlay ${isDrawerOpen ? 'open' : ''}`} onClick={() => setIsDrawerOpen(false)}></div>
+      <div className={`drawer ${isDrawerOpen ? 'open' : ''}`}>
+        <div className="drawer__header">
+          <FiUser size={24} />
+          <span>Hello, {user?.name?.split(' ')[0] || 'Sign in'}</span>
+          <button className="drawer__close" onClick={() => setIsDrawerOpen(false)}>×</button>
+        </div>
+        <div className="drawer__content">
+          <div className="drawer__section">
+            <h3>Trending</h3>
+            <p>Bestsellers</p>
+            <p>New Releases</p>
+            <p>Movers and Shakers</p>
+          </div>
+          <div className="drawer__section">
+            <h3>Digital Content and Devices</h3>
+            <p>Echo & Alexa</p>
+            <p>Fire TV</p>
+            <p>Kindle E-Readers & eBooks</p>
+            <p>Audible Audiobooks</p>
+            <p>Amazon Prime Video</p>
+            <p>Amazon Prime Music</p>
+          </div>
+          <div className="drawer__section">
+            <h3>Shop by Category</h3>
+            <p>Mobiles, Computers</p>
+            <p>TV, Appliances, Electronics</p>
+            <p>Men's Fashion</p>
+            <p>Women's Fashion</p>
+          </div>
         </div>
       </div>
     </>

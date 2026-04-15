@@ -78,7 +78,14 @@
     @media (max-width: 768px) { display: flex; }
   }
 
-  &__body { display: flex; max-width: 1400px; margin: 0 auto; }
+  &__body {
+    display: flex;
+    max-width: 1400px;
+    margin: -100px auto 0;
+    position: relative;
+    z-index: 10;
+    padding: 0 16px;
+  }
 
   &__sidebar {
     width: 240px; flex-shrink: 0; background: white; padding: 16px;
@@ -98,13 +105,15 @@
     @media (max-width: 768px) { display: block; }
   }
 
-  &__main { flex: 1; padding: 16px; }
+  &__main { flex: 1; padding: 16px 0; }
 
   &__row {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 16px;
-    @media (max-width: 600px) { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    @media (max-width: 1200px) { grid-template-columns: repeat(3, 1fr); }
+    @media (max-width: 900px) { grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 50px; }
+    @media (max-width: 600px) { grid-template-columns: repeat(1, 1fr); }
   }
 
   &__loading { display: flex; justify-content: center; padding: 60px; }

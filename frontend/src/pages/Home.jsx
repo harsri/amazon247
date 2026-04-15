@@ -22,10 +22,10 @@ const SORT_OPTIONS = [
 ];
 
 const CAROUSEL_IMAGES = [
-  'https://images-eu.ssl-images-amazon.com/images/G/31/img22/Wireless/devjyoti/PD23/Launches/Updated_ingress1242x450_3.gif',
-  'https://images-eu.ssl-images-amazon.com/images/G/31/img22/Toys/GW/GW-Hero-PC_BBAug23_Soft-toys_with-Apay_Lifestyle_2x._CB596817009_.jpg',
-  'https://images-eu.ssl-images-amazon.com/images/G/31/img20/AmazonBrands/GW/2-1a_1500x600._CB531065467_.jpg',
-  'https://images-eu.ssl-images-amazon.com/images/G/31/img23/Fashion/GW/Aug/Apay/Deals-3000-PC._CB596825701_.jpg'
+  'https://m.media-amazon.com/images/I/61lwJy4B8PL._SX3000_.jpg',
+  'https://m.media-amazon.com/images/I/71Ie3JXGfVL._SX3000_.jpg',
+  'https://m.media-amazon.com/images/I/71U-Q+N7PXL._SX3000_.jpg',
+  'https://m.media-amazon.com/images/I/61zAjw4bqPL._SX3000_.jpg'
 ];
 
 const Home = () => {

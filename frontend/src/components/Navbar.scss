@@ -14,11 +14,11 @@
     display: flex; align-items: flex-end; gap: 0;
     text-decoration: none; color: white;
     border: 1px solid transparent; padding: 6px 8px; border-radius: 2px;
-    flex-shrink: 0;
+    flex-shrink: 0; margin-top: 4px;
     &:hover { border-color: white; }
   }
-  &__logo { height: 26px; width: auto; }
-  &__brandIn { font-size: 14px; font-weight: 700; color: white; margin-left: 1px; }
+  &__logo { height: 32px; width: 100px; object-fit: contain; filter: brightness(0) invert(1); }
+  &__brandIn { font-size: 14px; font-weight: 700; color: white; margin-left: 1px; margin-bottom: 2px; }
 
   &__location {
     display: flex; align-items: center; gap: 4px; cursor: pointer;
@@ -114,12 +114,15 @@
 /* Sub Navbar */
 .subNavbar {
   background: #232f3e;
-  overflow-x: auto;
-  &::-webkit-scrollbar { display: none; }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   &__items {
     display: flex; align-items: center;
     padding: 0 12px; gap: 0; white-space: nowrap;
+    overflow-x: auto; flex: 1;
+    &::-webkit-scrollbar { display: none; }
   }
   &__item {
     padding: 8px 12px; color: #fff; font-size: 13px; font-weight: 500;
@@ -139,6 +142,48 @@
   &__rufusIcon {
     width: 14px; height: 14px; background: linear-gradient(135deg, #f90, #c45500);
     border-radius: 50%;
+  }
+  &__banner {
+    height: 38px; display: flex; align-items: center; justify-content: center;
+    padding: 0 15px; color: #fff; font-size: 13px; font-weight: 500; cursor: pointer;
+    background: linear-gradient(90deg, #d32f2f, #f57c00);
+    strong { font-weight: 700; margin-right: 6px; }
+    &:hover { opacity: 0.9; }
+    @media (max-width: 900px) { display: none; }
+  }
+}
+
+/* Sidebar Drawer */
+.drawerOverlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7); z-index: 10000;
+  opacity: 0; visibility: hidden; transition: 0.3s;
+  &.open { opacity: 1; visibility: visible; }
+}
+.drawer {
+  position: fixed; top: 0; left: -365px; bottom: 0;
+  width: 365px; background: white; z-index: 10001;
+  transition: left 0.3s cubic-bezier(0.82, 0.085, 0.395, 0.895);
+  overflow-y: auto; box-shadow: 2px 0 10px rgba(0,0,0,0.5);
+  &.open { left: 0; }
+
+  &__header {
+    background: #232f3e; padding: 15px 35px 15px 20px;
+    color: white; font-size: 19px; font-weight: 700;
+    display: flex; align-items: center; gap: 10px; position: relative;
+  }
+  &__close {
+    position: absolute; top: 10px; right: -40px; 
+    background: none; border: none; color: white; font-size: 36px; cursor: pointer;
+  }
+  &__content { padding-bottom: 50px; }
+  &__section {
+    padding: 15px 0; border-bottom: 1px solid #d5d9d9;
+    h3 { padding: 0 35px; font-size: 18px; font-weight: 700; color: #111; margin-bottom: 5px; }
+    p { 
+      padding: 13px 35px; font-size: 14px; color: #111; cursor: pointer; margin: 0;
+      &:hover { background: #eaeded; }
+    }
   }
 }
 
