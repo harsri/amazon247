@@ -1,30 +1,18 @@
 .addressBook {
   padding: 30px 40px;
-  background: #f3f3f3;
+  background: #fff;
   min-height: 80vh;
+  max-width: 1000px;
+  margin: 0 auto;
 
   &__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
-
-    h1 { font-size: 24px; font-weight: 600; }
-  }
-
-  &__empty {
-    text-align: center;
-    padding: 60px 20px;
-    background: white;
-    border-radius: 8px;
-    p { font-size: 18px; margin-bottom: 20px; color: #555; }
+    h1 { font-size: 28px; font-weight: 400; margin-bottom: 24px; color: #0f1111; }
   }
 
   &__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
     gap: 20px;
-    margin-top: 24px;
   }
 }
 
@@ -33,9 +21,9 @@
   border-radius: 8px;
   padding: 28px;
   margin-bottom: 28px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border: 1px solid #d5d9d9;
 
-  h2 { font-size: 20px; font-weight: 600; margin-bottom: 20px; }
+  h2 { font-size: 22px; font-weight: 500; margin-bottom: 20px; }
 
   &__grid {
     display: grid;
@@ -51,16 +39,16 @@
 
     &--wide { grid-column: 1 / -1; }
 
-    label { font-size: 13px; font-weight: 500; margin-bottom: 5px; color: #444; }
+    label { font-size: 13px; font-weight: 700; margin-bottom: 5px; color: #111; }
 
     input, select {
-      padding: 10px 12px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      padding: 8px 10px;
+      border: 1px solid #888C8C;
+      border-radius: 3px;
       font-size: 14px;
-      transition: border 0.2s;
-
-      &:focus { outline: none; border-color: #f90; box-shadow: 0 0 0 2px rgba(255,153,0,0.2); }
+      box-shadow: 0 1px 2px rgba(15,17,17,.15) inset;
+      
+      &:focus { outline: none; border-color: #e77600; box-shadow: 0 0 3px 2px rgba(228,121,17,.5); }
     }
   }
 
@@ -75,17 +63,15 @@
     align-items: center;
     gap: 6px;
     padding: 8px 16px;
-    border: 1px solid #ccc;
-    border-radius: 20px;
+    border: 1px solid #a6a6a6;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 13px;
-    font-weight: 500;
-    transition: all 0.2s;
-
+    background: #f0f2f2;
+    
     input { display: none; }
 
-    &.active { border-color: #f90; background: #fff8e7; color: #c45000; }
-    &:hover { border-color: #f90; }
+    &.active { border-color: #007185; background: #f2f7f8; }
   }
 
   &__actions {
@@ -96,60 +82,86 @@
 }
 
 .addressCard {
-  position: relative;
   background: white;
-  border: 1px solid #ddd;
+  border: 1px solid #d5d9d9;
   border-radius: 8px;
-  padding: 20px;
-  transition: box-shadow 0.2s;
+  height: 260px;
+  display: flex;
+  flex-direction: column;
 
-  &:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-
-  &--default { border-color: #f90; box-shadow: 0 0 0 2px rgba(255,153,0,0.3); }
-
-  &__badge {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background: #f90;
-    color: white;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 12px;
+  &--default {
+    border: 2px solid #a6a6a6; /* Thicker border but not orange in usual Amazon */
   }
 
-  &__type {
-    font-size: 12px;
-    font-weight: 600;
-    color: #555;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-    display: block;
+  &--add {
+    border: 2px dashed #c8cfcf;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    transform: none;
+    box-shadow: none;
+
+    &:hover {
+      background: #f7f8f8;
+      border-color: #a6a6a6;
+    }
   }
 
-  h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
-  p { font-size: 13px; color: #666; margin-bottom: 3px; }
+  &__addBtn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    
+    span { font-size: 20px; font-weight: 700; color: #565959; }
+  }
+
+  &__defaultHeader {
+    border-bottom: 1px solid #d5d9d9;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    
+    span { font-size: 13px; color: #565959; }
+  }
+
+  &__logo {
+    height: 18px;
+    width: auto;
+    filter: invert(1); /* Hack to make the white logo dark since current image is white SVG */
+    /* If the URL logo is a black amazon logo, remove filter. We should use a dark logo. */
+  }
+
+  &__content {
+    padding: 18px;
+    flex: 1;
+
+    h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; color: #0f1111; }
+    p { font-size: 14px; color: #0f1111; margin-bottom: 2px; line-height: 1.4; }
+  }
 
   &__actions {
     display: flex;
     gap: 8px;
-    margin-top: 14px;
+    margin-top: 18px;
+    align-items: center;
     flex-wrap: wrap;
   }
 
   &__btn {
-    padding: 5px 12px;
-    font-size: 12px;
-    border-radius: 4px;
+    background: none;
+    border: none;
+    color: #007185;
+    font-size: 13px;
     cursor: pointer;
-    font-weight: 500;
-    border: 1px solid;
+    padding: 0;
 
-    &--default { background: #fff8e7; border-color: #f90; color: #c45000; }
-    &--edit { background: #f0f2f2; border-color: #adb1b8; color: #111; }
-    &--delete { background: #fff; border-color: #d55; color: #d55; }
+    &:hover { text-decoration: underline; color: #c45500; }
+  }
 
-    &:hover { opacity: 0.85; }
+  &__separator {
+    color: #d5d9d9;
+    font-size: 13px;
   }
 }

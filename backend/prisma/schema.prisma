@@ -65,6 +65,7 @@ model Product {
   ratingCount   Int      @default(0)
   features      String?  @db.Text
   brand         String?
+  tags          String?  @db.Text
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 

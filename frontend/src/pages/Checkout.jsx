@@ -137,14 +137,33 @@ const Checkout = () => {
                 <span className="checkout__stepNum">3</span>
                 <h2>Payment Method</h2>
               </div>
-              <div className="checkout__payment">
-                <div className="checkout__paymentOption selected">
-                  <span>💵</span>
-                  <div>
+              <div className="checkout__paymentOptions">
+                <label className="checkout__paymentOption">
+                  <input type="radio" name="payment" value="COD" defaultChecked />
+                  <div className="checkout__paymentDetails">
                     <strong>Cash on Delivery (COD)</strong>
                     <p>Pay when your order arrives. Keep exact change ready.</p>
                   </div>
-                </div>
+                </label>
+                <label className="checkout__paymentOption disabled" title="Currently implementing gateway">
+                  <input type="radio" name="payment" value="CARD" disabled />
+                  <div className="checkout__paymentDetails">
+                    <strong>Credit / Debit Card</strong>
+                    <div className="checkout__paymentCards">
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" alt="MC" />
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" alt="Visa" />
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/American_Express_logo_%left%right.svg/1200px-American_Express_logo_%left%right.svg.png" alt="Amex" />
+                    </div>
+                    <p style={{color: '#c45500', fontSize: '12px', marginTop: '4px'}}>Dummy payment gateway coming soon.</p>
+                  </div>
+                </label>
+                <label className="checkout__paymentOption disabled" title="Currently implementing gateway">
+                  <input type="radio" name="payment" value="UPI" disabled />
+                  <div className="checkout__paymentDetails">
+                    <strong>UPI / Netbanking</strong>
+                    <p>Google Pay, PhonePe, Paytm and more.</p>
+                  </div>
+                </label>
               </div>
             </div>
           </div>

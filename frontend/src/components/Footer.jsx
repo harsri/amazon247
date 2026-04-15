@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Footer.scss';
 
 const Footer = () => {
@@ -11,29 +12,34 @@ const Footer = () => {
         <div className="footer__linkCol">
           <h3>Get to Know Us</h3>
           <ul>
-            <li>Careers</li>
-            <li>Blog</li>
-            <li>About Us</li>
+            <li><Link to="/support">Careers</Link></li>
+            <li><Link to="/support">Blog</Link></li>
+            <li><Link to="/support">About Us</Link></li>
           </ul>
         </div>
         <div className="footer__linkCol">
           <h3>Make Money with Us</h3>
           <ul>
-            <li>Sell products on AmazonClone</li>
-            <li>Become an Affiliate</li>
-            <li>Advertise Your Products</li>
+            <li><Link to="/support">Sell products on AmazonClone</Link></li>
+            <li><Link to="/support">Become an Affiliate</Link></li>
+            <li><Link to="/support">Advertise Your Products</Link></li>
           </ul>
         </div>
         <div className="footer__linkCol">
           <h3>Let Us Help You</h3>
           <ul>
-            <li>Your Account</li>
-            <li>Your Orders</li>
-            <li>Help</li>
+            <li><Link to="/support">Your Account</Link></li>
+            <li><Link to="/orders">Your Orders</Link></li>
+            <li><Link to="/support">Help & Support</Link></li>
           </ul>
         </div>
       </div>
       <div className="footer__bottom">
+         <div className="footer__bottomLine">
+           <Link to="/support">Conditions of Use & Sale</Link>
+           <Link to="/support">Privacy Notice</Link>
+           <Link to="/support">Interest-Based Ads</Link>
+         </div>
         <p>&copy; 2026 AmazonClone. Educational purposes only.</p>
       </div>
     </footer>

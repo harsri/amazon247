@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { AddressContext } from '../context/AddressContext';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { FiPlus } from 'react-icons/fi';
 import './AddressBook.scss';
 
 const EMPTY_FORM = { fullName: '', phone: '', email: '', houseNo: '', addressLine1: '', addressLine2: '', city: '', state: '', pincode: '', landmark: '', addressType: 'HOME' };
@@ -51,18 +52,13 @@ const AddressBook = () => {
   return (
     <div className="addressBook">
       <div className="addressBook__header">
-        <h1>Your Saved Addresses</h1>
-        {!showForm && (
-          <button className="btn-primary" onClick={() => { setShowForm(true); setEditId(null); setForm(EMPTY_FORM); }}>
-            + Add New Address
-          </button>
-        )}
+        <h1>Your Addresses</h1>
       </div>
 
       {/* Address Form */}
       {showForm && (
         <div className="addressForm">
-          <h2>{editId ? 'Edit Address' : 'Add New Address'}</h2>
+          <h2>{editId ? 'Edit Address' : 'Add a new address'}</h2>
           <form onSubmit={handleSubmit}>
             <div className="addressForm__grid">
               <div className="addressForm__field">
@@ -131,31 +127,47 @@ const AddressBook = () => {
       {/* Address Cards */}
       {loading ? (
         <p>Loading addresses...</p>
-      ) : addresses.length === 0 && !showForm ? (
-        <div className="addressBook__empty">
-          <p>You have no saved addresses.</p>
-          <button className="btn-primary" onClick={() => setShowForm(true)}>Add Your First Address</button>
-        </div>
       ) : (
         <div className="addressBook__grid">
+          {/* Add New Address Card */}
+          {!showForm && (
+            <div className="addressCard addressCard--add" onClick={() => { setShowForm(true); setEditId(null); setForm(EMPTY_FORM); }}>
+              <div className="addressCard__addBtn">
+                <FiPlus size={48} color="#ccc" />
+                <span>Add address</span>
+              </div>
+            </div>
+          )}
+
           {addresses.map(addr => (
             <div className={`addressCard ${addr.isDefault ? 'addressCard--default' : ''}`} key={addr.id}>
-              {addr.isDefault && <span className="addressCard__badge">DEFAULT</span>}
-              <span className="addressCard__type">{addr.addressType === 'HOME' ? '🏠' : addr.addressType === 'WORK' ? '🏢' : '📍'} {addr.addressType}</span>
-              <h3>{addr.fullName}</h3>
-              <p>{addr.houseNo}, {addr.addressLine1}</p>
-              {addr.addressLine2 && <p>{addr.addressLine2}</p>}
-              {addr.landmark && <p>Near: {addr.landmark}</p>}
-              <p>{addr.city}, {addr.state} - {addr.pincode}</p>
-              <p>📞 {addr.phone}</p>
-              <div className="addressCard__actions">
-                {!addr.isDefault && (
-                  <button className="addressCard__btn addressCard__btn--default" onClick={() => setDefault(addr.id)}>
-                    Set as Default
-                  </button>
-                )}
-                <button className="addressCard__btn addressCard__btn--edit" onClick={() => handleEdit(addr)}>Edit</button>
-                <button className="addressCard__btn addressCard__btn--delete" onClick={() => deleteAddress(addr.id)}>Delete</button>
+              {addr.isDefault && (
+                  <div className="addressCard__defaultHeader">
+                      <span>Default: </span>
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/1024px-Amazon_logo.svg.png" alt="Amazon Logo" className="addressCard__logo" />
+                  </div>
+              )}
+              
+              <div className="addressCard__content">
+                <h3>{addr.fullName}</h3>
+                <p>{addr.houseNo}, {addr.addressLine1}</p>
+                {addr.addressLine2 && <p>{addr.addressLine2}</p>}
+                <p>{addr.city}, {addr.state} {addr.pincode}</p>
+                <p>India</p>
+                <p>Phone number: {addr.phone}</p>
+                {addr.landmark && <p>Landmark: {addr.landmark}</p>}
+                
+                <div className="addressCard__actions">
+                  <button className="addressCard__btn" onClick={() => handleEdit(addr)}>Edit</button>
+                  <span className="addressCard__separator">|</span>
+                  <button className="addressCard__btn" onClick={() => deleteAddress(addr.id)}>Remove</button>
+                  {!addr.isDefault && (
+                    <>
+                      <span className="addressCard__separator">|</span>
+                      <button className="addressCard__btn" onClick={() => setDefault(addr.id)}>Set as Default</button>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
           ))}

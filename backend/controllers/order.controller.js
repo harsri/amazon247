@@ -113,4 +113,37 @@ const requestReturn = async (req, res) => {
   }
 };
 
-module.exports = { placeOrder, getOrders, requestReturn };
+const cancelOrder = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const order = await prisma.order.findFirst({
+      where: { id: parseInt(id), userId: req.userId },
+      include: { orderItems: true }
+    });
+    if (!order) return res.status(404).json({ error: 'Order not found.' });
+    if (!['PENDING', 'PROCESSING'].includes(order.status)) {
+      return res.status(400).json({ error: 'Only pending or processing orders can be cancelled.' });
+    }
+
+    await prisma.$transaction(async (tx) => {
+      // Restore stock for each item
+      for (const item of order.orderItems) {
+        await tx.product.update({
+          where: { id: item.productId },
+          data: { stock: { increment: item.quantity } }
+        });
+      }
+      await tx.order.update({
+        where: { id: parseInt(id) },
+        data: { status: 'CANCELLED' }
+      });
+    });
+
+    res.status(200).json({ message: 'Order cancelled. Stock restored.' });
+  } catch (error) {
+    console.error('Cancel Order Error:', error);
+    res.status(500).json({ error: 'Internal server error.' });
+  }
+};
+
+module.exports = { placeOrder, getOrders, requestReturn, cancelOrder };

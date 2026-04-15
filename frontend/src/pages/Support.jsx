@@ -83,6 +83,15 @@ const Support = () => {
         {/* Contact Form */}
         {activeTab === 'contact' && (
           <div className="support__form">
+            <h2>Contact Us</h2>
+            <div className="support__directContact">
+              <p>📍 <strong>Headquarters:</strong> AmazonClone Towers, Tech Park, Bengaluru, India 560001</p>
+              <p>📞 <strong>Phone:</strong> 1800-123-4567 (Toll Free, 24x7)</p>
+              <p>✉️ <strong>Email:</strong> support@amazonclone.in</p>
+            </div>
+            
+            <hr style={{ margin: '20px 0', border: 'none', borderTop: '1px solid #eee' }} />
+            
             <h2>Submit a Support Request</h2>
             {!user && <p className="support__loginNote">Please <a href="/login">log in</a> to submit a ticket and track your issues.</p>}
             <form onSubmit={handleSubmit}>

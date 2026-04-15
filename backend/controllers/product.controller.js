@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 
 const getProducts = async (req, res) => {
   try {
-    const { category, search, minPrice, maxPrice, sort } = req.query;
+    const { category, search, minPrice, maxPrice, sort, brand } = req.query;
 
     const whereClause = {};
 
@@ -11,11 +11,16 @@ const getProducts = async (req, res) => {
       whereClause.category = { name: { contains: category } };
     }
 
+    if (brand) {
+      whereClause.brand = { contains: brand };
+    }
+
     if (search) {
       whereClause.OR = [
         { title: { contains: search } },
         { description: { contains: search } },
-        { brand: { contains: search } }
+        { brand: { contains: search } },
+        { tags: { contains: search } }
       ];
     }
 

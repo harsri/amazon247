@@ -1,6 +1,9 @@
 import React, { useContext } from 'react';
 import { CartContext } from '../context/CartContext';
+import { WishlistContext } from '../context/WishlistContext';
 import { Link, useNavigate } from 'react-router-dom';
+import { FiTrash2, FiBookmark } from 'react-icons/fi';
+import { toast } from 'react-toastify';
 import './Cart.scss';
 
 const DELIVERY_CHARGE = 49;
@@ -8,93 +11,69 @@ const FREE_DELIVERY_THRESHOLD = 999;
 
 const Cart = () => {
   const { cartItems, cartTotal, removeFromCart, updateQuantity } = useContext(CartContext);
+  const { toggleWishlist } = useContext(WishlistContext);
   const navigate = useNavigate();
 
   const deliveryCharge = cartTotal >= FREE_DELIVERY_THRESHOLD ? 0 : DELIVERY_CHARGE;
 
+  const handleSaveForLater = (item) => {
+    toggleWishlist(item.productId);
+    removeFromCart(item.id);
+    toast.info('Moved to wishlist / Saved for later');
+  };
+
   return (
     <div className="cart">
       <div className="cart__left">
-        <div>
-          <h2 className="cart__title">Shopping Cart</h2>
-          {cartItems.length === 0 ? (
-            <div className="cart__empty">
-              <p>Your cart is empty.</p>
-              <Link to="/" className="btn-primary">Continue Shopping</Link>
-            </div>
-          ) : (
-            cartItems.map((item) => (
-              <div className="cartItem" key={item.id}>
-                <Link to={`/product/${item.productId}`}>
-                  <img className="cartItem__image" src={item.product.images?.[0]?.url || 'https://via.placeholder.com/180'} alt={item.product.title} />
+        <h2 className="cart__title">Shopping Cart</h2>
+        <p className="cart__priceLabel">Price</p>
+        {cartItems.length === 0 ? (
+          <div className="cart__empty">
+            <p>Your Amazon Cart is empty.</p>
+            <Link to="/" className="btn-primary">Shop today's deals</Link>
+          </div>
+        ) : (
+          cartItems.map(item => (
+            <div className="cartItem" key={item.id}>
+              <Link to={`/product/${item.productId}`}>
+                <img className="cartItem__image" src={item.product.images?.[0]?.url || 'https://picsum.photos/seed/cart/180/180'} alt={item.product.title} />
+              </Link>
+              <div className="cartItem__info">
+                <Link to={`/product/${item.productId}`} className="cartItem__titleLink">
+                  <p className="cartItem__title">{item.product.title}</p>
                 </Link>
-                <div className="cartItem__info">
-                  <Link to={`/product/${item.productId}`} className="cartItem__titleLink">
-                    <p className="cartItem__title">{item.product.title}</p>
-                  </Link>
-                  <p className="cartItem__brand">{item.product.brand}</p>
-                  <p className="cartItem__price">
-                    ₹{(item.product.price * item.quantity).toFixed(2)}
-                    {item.quantity > 1 && <span className="cartItem__unitPrice"> (₹{item.product.price} each)</span>}
-                  </p>
-                  <p className={`cartItem__stock ${item.product.stock > 0 ? 'inStock' : 'outOfStock'}`}>
-                    {item.product.stock > 0 ? 'In Stock' : 'Out of Stock'}
-                  </p>
-                  <div className="cartItem__actions">
-                    <label>Qty:
-                      <select
-                        value={item.quantity}
-                        onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))}
-                      >
-                        {[...Array(Math.min(10, item.product.stock)).keys()].map((x) => (
-                          <option key={x + 1} value={x + 1}>{x + 1}</option>
-                        ))}
-                      </select>
-                    </label>
-                    <span className="cartItem__divider">|</span>
-                    <button className="cartItem__removeBtn" onClick={() => removeFromCart(item.id)}>Delete</button>
-                    <span className="cartItem__divider">|</span>
-                    <button className="cartItem__saveBtn">Save for later</button>
-                  </div>
+                {item.product.brand && <p className="cartItem__brand">by {item.product.brand}</p>}
+                <p className={`cartItem__stock ${item.product.stock > 0 ? 'inStock' : 'outOfStock'}`}>
+                  {item.product.stock > 0 ? 'In Stock' : 'Out of Stock'}
+                </p>
+                <div className="cartItem__actions">
+                  <label className="cartItem__qty">
+                    Qty:
+                    <select value={item.quantity} onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))}>
+                      {[...Array(Math.min(10, item.product.stock)).keys()].map(x => <option key={x + 1} value={x + 1}>{x + 1}</option>)}
+                    </select>
+                  </label>
+                  <span className="cartItem__divider">|</span>
+                  <button className="cartItem__actionBtn" onClick={() => removeFromCart(item.id)}><FiTrash2 size={13} /> Delete</button>
+                  <span className="cartItem__divider">|</span>
+                  <button className="cartItem__actionBtn" onClick={() => handleSaveForLater(item)}><FiBookmark size={13} /> Save for later</button>
                 </div>
               </div>
-            ))
-          )}
-        </div>
+              <p className="cartItem__price">₹{(item.product.price * item.quantity).toLocaleString('en-IN')}</p>
+            </div>
+          ))
+        )}
       </div>
 
       {cartItems.length > 0 && (
         <div className="cart__right">
           <div className="subtotal">
-            <div className="subtotal__rows">
-              <div className="subtotal__row">
-                <span>Subtotal ({cartItems.reduce((acc, item) => acc + item.quantity, 0)} items)</span>
-                <span>₹{cartTotal.toFixed(2)}</span>
-              </div>
-              <div className="subtotal__row">
-                <span>Delivery</span>
-                <span className={deliveryCharge === 0 ? 'subtotal__free' : ''}>
-                  {deliveryCharge === 0 ? 'FREE' : `₹${deliveryCharge}`}
-                </span>
-              </div>
-            </div>
-            {deliveryCharge > 0 && (
-              <p className="subtotal__hint">Add ₹{(FREE_DELIVERY_THRESHOLD - cartTotal).toFixed(0)} more for FREE delivery</p>
-            )}
-            <div className="subtotal__total">
-              <strong>Estimated Total: ₹{(cartTotal + deliveryCharge).toFixed(2)}</strong>
-              <small>(+ 18% GST at checkout)</small>
-            </div>
-            <small className="subtotal__gift">
-              <input type="checkbox" /> This order contains a gift
-            </small>
-            <button
-              className="btn-primary"
-              disabled={cartItems.length === 0}
-              onClick={() => navigate('/checkout')}
-            >
-              Proceed to Checkout
-            </button>
+            <div className="subtotal__row"><span>Subtotal ({cartItems.reduce((a, i) => a + i.quantity, 0)} items)</span><span className="subtotal__amount">₹{cartTotal.toLocaleString('en-IN')}</span></div>
+            <div className="subtotal__row"><span>Delivery</span><span className={deliveryCharge === 0 ? 'subtotal__free' : ''}>{deliveryCharge === 0 ? 'FREE' : `₹${deliveryCharge}`}</span></div>
+            {deliveryCharge > 0 && <p className="subtotal__hint">Add ₹{(FREE_DELIVERY_THRESHOLD - cartTotal).toFixed(0)} more for FREE delivery</p>}
+            <div className="subtotal__total">Estimated Total: <strong>₹{(cartTotal + deliveryCharge).toLocaleString('en-IN')}</strong></div>
+            <small className="subtotal__tax">(+ 18% GST calculated at checkout)</small>
+            <button className="subtotal__btn" onClick={() => navigate('/checkout')}>Proceed to Buy</button>
           </div>
         </div>
       )}

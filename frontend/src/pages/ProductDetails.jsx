@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
 import { WishlistContext } from '../context/WishlistContext';
 import { AuthContext } from '../context/AuthContext';
 import api from '../utils/api';
 import { toast } from 'react-toastify';
-import { FiHeart } from 'react-icons/fi';
+import { FiHeart, FiShare2, FiTruck, FiShield, FiRefreshCw } from 'react-icons/fi';
 import { FaHeart, FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import './ProductDetails.scss';
 
@@ -17,13 +17,9 @@ const StarRating = ({ value, max = 5, onRate, interactive = false }) => {
         const filled = interactive ? (hovered || value) >= i + 1 : value >= i + 1;
         const half = !interactive && value >= i + 0.5 && value < i + 1;
         return interactive ? (
-          <FaStar
-            key={i}
-            className={`starRating__star ${filled ? 'filled' : ''} ${interactive ? 'interactive' : ''}`}
-            onMouseEnter={() => setHovered(i + 1)}
-            onMouseLeave={() => setHovered(0)}
-            onClick={() => onRate && onRate(i + 1)}
-          />
+          <FaStar key={i} className={`starRating__star ${filled ? 'filled' : ''} interactive`}
+            onMouseEnter={() => setHovered(i + 1)} onMouseLeave={() => setHovered(0)}
+            onClick={() => onRate && onRate(i + 1)} />
         ) : half ? (
           <FaStarHalfAlt key={i} className="starRating__star filled" />
         ) : filled ? (
@@ -50,12 +46,14 @@ const ProductDetails = () => {
   const [submittingReview, setSubmittingReview] = useState(false);
   const [similarProducts, setSimilarProducts] = useState([]);
   const [features, setFeatures] = useState([]);
+  const [zoomStyle, setZoomStyle] = useState({});
+  const imgRef = useRef(null);
 
   const { addToCart } = useContext(CartContext);
-  const { addToWishlist, wishlistItems } = useContext(WishlistContext);
+  const { toggleWishlist, isWishlisted } = useContext(WishlistContext);
   const { user } = useContext(AuthContext);
 
-  const isWishlisted = wishlistItems.some(w => w.productId === parseInt(id));
+  const wishlisted = isWishlisted(parseInt(id));
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -65,32 +63,36 @@ const ProductDetails = () => {
         const prod = res.data.product;
         setProduct(prod);
         setActiveImg(0);
-
-        // Parse features
         try { setFeatures(JSON.parse(prod.features || '[]')); } catch { setFeatures([]); }
-
-        // Fetch similar products from same category
         const similarRes = await api.get(`/products?category=${encodeURIComponent(prod.category?.name || '')}`);
         setSimilarProducts((similarRes.data.products || []).filter(p => p.id !== prod.id).slice(0, 4));
-
-        // Fetch reviews
         const revRes = await api.get(`/reviews/${id}`);
         setReviews(revRes.data.reviews || []);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
+      } catch (err) { console.error(err); }
+      finally { setLoading(false); }
     };
     fetchProduct();
   }, [id]);
 
-  const handlePincodeCheck = async () => {
-    if (!pincode) { toast.warn('Enter a pincode'); return; }
-    try {
-      const res = await api.post('/products/pincode', { pincode });
-      setDeliveryMsg(res.data.message);
-    } catch { setDeliveryMsg('Unable to check pincode.'); }
+  const handleZoom = (e) => {
+    const img = imgRef.current;
+    if (!img) return;
+    const rect = img.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    setZoomStyle({ transformOrigin: `${x}% ${y}%`, transform: 'scale(2)' });
+  };
+  const handleZoomOut = () => setZoomStyle({});
+
+  const handleShare = async () => {
+    const url = window.location.href;
+    if (navigator.share) {
+      try { await navigator.share({ title: product.title, text: `Check out ${product.title} on Amazon.in`, url }); }
+      catch {}
+    } else {
+      await navigator.clipboard.writeText(url);
+      toast.success('Link copied to clipboard!');
+    }
   };
 
   const handleBuyNow = () => { addToCart(product.id, 1); navigate('/checkout'); };
@@ -103,26 +105,24 @@ const ProductDetails = () => {
       await api.post(`/reviews/${id}`, { rating: userRating, comment: userComment });
       const revRes = await api.get(`/reviews/${id}`);
       setReviews(revRes.data.reviews || []);
-      setUserComment('');
-      setUserRating(5);
+      // Refresh product ratings
+      const prodRes = await api.get(`/products/${id}`);
+      setProduct(prodRes.data.product);
+      setUserComment(''); setUserRating(5);
       toast.success('Review submitted!');
-    } catch (err) {
-      toast.error(err.response?.data?.error || 'Failed to submit review.');
-    } finally {
-      setSubmittingReview(false);
-    }
+    } catch (err) { toast.error(err.response?.data?.error || 'Failed to submit review.'); }
+    finally { setSubmittingReview(false); }
   };
 
   if (loading) return <div className="productDetails__loading"><div className="productDetails__spinner" /></div>;
   if (!product) return <div className="productDetails__loading">Product not found.</div>;
 
-  const images = product.images?.length ? product.images : [{ url: 'https://via.placeholder.com/400?text=No+Image' }];
+  const images = product.images?.length ? product.images : [{ url: 'https://picsum.photos/seed/noprod/400/400' }];
 
   return (
     <div className="productDetails">
-      {/* MAIN DETAIL SECTION */}
       <div className="productDetails__main">
-        {/* Image Gallery */}
+        {/* Gallery */}
         <div className="productDetails__gallery">
           <div className="productDetails__thumbnails">
             {images.map((img, i) => (
@@ -131,14 +131,14 @@ const ProductDetails = () => {
                 onClick={() => setActiveImg(i)} />
             ))}
           </div>
-          <div className="productDetails__mainImg">
-            <img src={images[activeImg]?.url} alt={product.title} />
-            <button
-              className={`productDetails__heart ${isWishlisted ? 'wishlisted' : ''}`}
-              onClick={() => addToWishlist(product.id)}
-              title={isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
-            >
-              {isWishlisted ? <FaHeart /> : <FiHeart />}
+          <div className="productDetails__mainImg" onMouseMove={handleZoom} onMouseLeave={handleZoomOut}>
+            <img ref={imgRef} src={images[activeImg]?.url} alt={product.title} style={zoomStyle} />
+            <button className={`productDetails__heart ${wishlisted ? 'wishlisted' : ''}`}
+              onClick={() => toggleWishlist(product.id)}>
+              {wishlisted ? <FaHeart /> : <FiHeart />}
+            </button>
+            <button className="productDetails__share" onClick={handleShare} title="Share this product">
+              <FiShare2 />
             </button>
           </div>
         </div>
@@ -147,71 +147,67 @@ const ProductDetails = () => {
         <div className="productDetails__info">
           {product.brand && <p className="productDetails__brand">Brand: <Link to={`/?search=${product.brand}`}><strong>{product.brand}</strong></Link></p>}
           <h1 className="productDetails__title">{product.title}</h1>
-
           <div className="productDetails__ratingRow">
             <StarRating value={product.ratings} />
             <span className="productDetails__ratingVal">{product.ratings.toFixed(1)}</span>
             <span className="productDetails__ratingCount">({product.ratingCount?.toLocaleString()} ratings)</span>
           </div>
-
-          <div className="productDetails__category">
-            Category: <Link to={`/?category=${product.category?.name}`}>{product.category?.name}</Link>
-          </div>
-
+          <div className="productDetails__category">in <Link to={`/?category=${product.category?.name}`}>{product.category?.name}</Link></div>
           <hr />
-
           <div className="productDetails__priceBox">
-            <span className="productDetails__label">Price:</span>
-            <span className="productDetails__priceOld">₹{(product.price * 1.2).toFixed(0)}</span>
-            <span className="productDetails__price">₹{product.price.toFixed(2)}</span>
-            <span className="productDetails__discount">17% off</span>
+            <span className="productDetails__label">M.R.P.:</span>
+            <span className="productDetails__priceOld">₹{(product.price * 1.2).toLocaleString('en-IN', { maximumFractionDigits: 0 })}</span>
           </div>
-          <p className="productDetails__taxNote">Inclusive of all taxes. Free delivery on orders above ₹999.</p>
-
+          <div className="productDetails__priceBox">
+            <span className="productDetails__label">Deal Price:</span>
+            <span className="productDetails__price">₹{product.price.toLocaleString('en-IN')}</span>
+            <span className="productDetails__discount">Save 17%</span>
+          </div>
+          <p className="productDetails__taxNote">Inclusive of all taxes. EMI starts at ₹{Math.ceil(product.price / 12).toLocaleString('en-IN')}/month.</p>
           <p className="productDetails__description">{product.description}</p>
-
           {features.length > 0 && (
             <div className="productDetails__features">
               <h3>Key Features</h3>
-              <ul>
-                {features.map((f, i) => <li key={i}>✓ {f}</li>)}
-              </ul>
+              <ul>{features.map((f, i) => <li key={i}>{f}</li>)}</ul>
             </div>
           )}
-
-          {/* Pincode */}
+          <div className="productDetails__serviceIcons">
+            <div><FiTruck /><span>Free Delivery</span></div>
+            <div><FiRefreshCw /><span>7 Day Return</span></div>
+            <div><FiShield /><span>2 Year Warranty</span></div>
+          </div>
           <div className="productDetails__pincode">
-            <h4>Check Delivery</h4>
+            <h4><FiMapPin /> Check Delivery</h4>
             <div className="productDetails__pincodeRow">
               <input type="text" placeholder="Enter 6-digit PIN" value={pincode} onChange={e => setPincode(e.target.value)} maxLength={6} />
-              <button onClick={handlePincodeCheck} className="btn-secondary">Check</button>
+              <button onClick={async () => {
+                if (!pincode) return;
+                try { const r = await api.post('/products/pincode', { pincode }); setDeliveryMsg(r.data.message); }
+                catch { setDeliveryMsg('Unable to check pincode.'); }
+              }}>Check</button>
             </div>
-            {deliveryMsg && <p className={`productDetails__deliveryMsg ${deliveryMsg.includes('not available') ? 'unavail' : ''}`}>{deliveryMsg}</p>}
+            {deliveryMsg && <p className={`productDetails__deliveryMsg ${deliveryMsg.includes('not') ? 'unavail' : ''}`}>{deliveryMsg}</p>}
           </div>
         </div>
 
         {/* Buy Box */}
         <div className="productDetails__buyBox">
-          <p className="productDetails__buyPrice">₹{product.price.toFixed(2)}</p>
+          <p className="productDetails__buyPrice">₹{product.price.toLocaleString('en-IN')}</p>
           <p className={`productDetails__buyStock ${product.stock > 0 ? 'inStock' : 'outStock'}`}>
-            {product.stock > 0 ? `In Stock (${product.stock} left)` : 'Out of Stock'}
+            {product.stock > 0 ? `In Stock` : 'Out of Stock'}
           </p>
-          <p className="productDetails__buyDelivery">🚚 Delivery by tomorrow</p>
-          <button className="btn-primary productDetails__addCart" onClick={() => { addToCart(product.id, 1); toast.success('Added to cart!'); }} disabled={product.stock <= 0}>
-            Add to Cart
-          </button>
-          <button className="btn-primary productDetails__buyNow" onClick={handleBuyNow} disabled={product.stock <= 0}>
-            Buy Now
-          </button>
-          <div className="productDetails__secure">🔒 Secure transaction</div>
+          <p className="productDetails__buyDelivery"><FiTruck /> FREE delivery by tomorrow</p>
+          <button className="productDetails__addCart" onClick={() => { addToCart(product.id, 1); toast.success('Added to cart!'); }} disabled={product.stock <= 0}>Add to Cart</button>
+          <button className="productDetails__buyNow" onClick={handleBuyNow} disabled={product.stock <= 0}>Buy Now</button>
+          <div className="productDetails__secure"><FiShield /> Secure transaction</div>
           <div className="productDetails__misc">
-            <p>Sold by: <strong>AmazonClone Store</strong></p>
+            <p>Sold by: <strong>Amazon.in</strong></p>
             <p>Gift wrapping available</p>
           </div>
         </div>
       </div>
 
-      {/* REVIEWS SECTION */}
+      {/* Reviews */}
       <div className="productDetails__reviewSection">
         <div className="productDetails__reviewLeft">
           <h2>Customer Reviews</h2>
@@ -220,9 +216,7 @@ const ProductDetails = () => {
             <StarRating value={product.ratings} />
             <span>{product.ratingCount?.toLocaleString()} global ratings</span>
           </div>
-
-          {/* Rating Bars */}
-          {[5, 4, 3, 2, 1].map(star => {
+          {[5,4,3,2,1].map(star => {
             const count = reviews.filter(r => r.rating === star).length;
             const pct = reviews.length ? Math.round((count / reviews.length) * 100) : 0;
             return (
@@ -234,24 +228,18 @@ const ProductDetails = () => {
             );
           })}
         </div>
-
         <div className="productDetails__reviewRight">
-          {/* Write Review Form */}
           {user && (
             <div className="productDetails__reviewForm">
               <h3>Write a Review</h3>
               <form onSubmit={handleSubmitReview}>
                 <p>Your Rating:</p>
                 <StarRating value={userRating} interactive onRate={setUserRating} />
-                <textarea required placeholder="Share your experience with this product..." value={userComment} onChange={e => setUserComment(e.target.value)} rows={4} />
-                <button type="submit" className="btn-primary" disabled={submittingReview}>
-                  {submittingReview ? 'Submitting...' : 'Submit Review'}
-                </button>
+                <textarea required placeholder="Share your experience..." value={userComment} onChange={e => setUserComment(e.target.value)} rows={4} />
+                <button type="submit" className="btn-primary" disabled={submittingReview}>{submittingReview ? 'Submitting...' : 'Submit Review'}</button>
               </form>
             </div>
           )}
-
-          {/* Review List */}
           <div className="productDetails__reviewList">
             {reviews.length === 0 ? (
               <p className="productDetails__noReviews">No reviews yet. Be the first to review!</p>
@@ -259,10 +247,7 @@ const ProductDetails = () => {
               <div className="reviewCard" key={r.id}>
                 <div className="reviewCard__header">
                   <span className="reviewCard__avatar">{r.user.name[0].toUpperCase()}</span>
-                  <div>
-                    <strong>{r.user.name}</strong>
-                    <StarRating value={r.rating} />
-                  </div>
+                  <div><strong>{r.user.name}</strong><StarRating value={r.rating} /></div>
                   <span className="reviewCard__date">{new Date(r.createdAt).toLocaleDateString('en-IN')}</span>
                 </div>
                 <p className="reviewCard__comment">{r.comment}</p>
@@ -272,20 +257,17 @@ const ProductDetails = () => {
         </div>
       </div>
 
-      {/* SIMILAR PRODUCTS */}
+      {/* Similar Products */}
       {similarProducts.length > 0 && (
         <div className="productDetails__similar">
-          <h2>Similar Products</h2>
+          <h2>Products related to this item</h2>
           <div className="productDetails__similarGrid">
             {similarProducts.map(p => (
               <Link to={`/product/${p.id}`} className="similarCard" key={p.id}>
-                <img src={p.images?.[0]?.url || 'https://via.placeholder.com/200'} alt={p.title} />
+                <img src={p.images?.[0]?.url || 'https://picsum.photos/seed/sim/200/200'} alt={p.title} />
                 <p className="similarCard__title">{p.title}</p>
-                <div className="similarCard__rating">
-                  <StarRating value={p.ratings} />
-                  <span>({p.ratingCount})</span>
-                </div>
-                <p className="similarCard__price">₹{p.price.toFixed(2)}</p>
+                <div className="similarCard__rating"><StarRating value={p.ratings} /><span>({p.ratingCount})</span></div>
+                <p className="similarCard__price">₹{p.price.toLocaleString('en-IN')}</p>
               </Link>
             ))}
           </div>
@@ -294,5 +276,7 @@ const ProductDetails = () => {
     </div>
   );
 };
+
+const FiMapPin = () => <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>;
 
 export default ProductDetails;

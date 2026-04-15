@@ -3,6 +3,8 @@
   background: #f3f3f3;
   min-height: 80vh;
 
+  @media (max-width: 600px) { padding: 16px; }
+
   h1 { font-size: 24px; font-weight: 500; margin-bottom: 20px; }
   &__empty { text-align: center; padding: 60px; background: white; border-radius: 8px; p { font-size: 18px; color: #555; } }
   &__list { display: flex; flex-direction: column; gap: 16px; }

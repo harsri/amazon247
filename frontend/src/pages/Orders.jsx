@@ -8,9 +8,13 @@ const STATUS_STEPS = ['PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED'];
 const StatusTimeline = ({ status }) => {
   const currentIdx = STATUS_STEPS.indexOf(status);
   const isReturn = status === 'RETURN_REQUESTED' || status === 'RETURNED';
+  const isCancelled = status === 'CANCELLED';
+  
   return (
     <div className="statusTimeline">
-      {isReturn ? (
+      {isCancelled ? (
+        <div className="statusTimeline__return" style={{ background: '#fce8e6', color: '#B12704' }}>❌ Order Cancelled</div>
+      ) : isReturn ? (
         <div className="statusTimeline__return">🔄 Return {status === 'RETURNED' ? 'Completed' : 'Requested'}</div>
       ) : (
         STATUS_STEPS.map((step, i) => (
@@ -52,6 +56,17 @@ const Orders = () => {
       fetchOrders();
     } catch (err) {
       toast.error(err.response?.data?.error || 'Failed to request return.');
+    }
+  };
+
+  const handleCancel = async (orderId) => {
+    if (!window.confirm('Are you sure you want to cancel this order?')) return;
+    try {
+      await api.put(`/orders/${orderId}/cancel`);
+      toast.success('Order cancelled successfully!');
+      fetchOrders();
+    } catch (err) {
+      toast.error(err.response?.data?.error || 'Failed to cancel order.');
     }
   };
 
@@ -133,10 +148,15 @@ const Orders = () => {
                       </div>
                     )}
 
-                    {/* Return */}
+                    {/* Return / Cancel */}
                     {order.status === 'DELIVERED' && (
                       <button className="order__returnBtn" onClick={() => handleReturn(order.id)}>
                         Request Return / Refund
+                      </button>
+                    )}
+                    {['PENDING', 'PROCESSING'].includes(order.status) && (
+                      <button className="order__returnBtn" onClick={() => handleCancel(order.id)}>
+                        Cancel Order
                       </button>
                     )}
                   </div>

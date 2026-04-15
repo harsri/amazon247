@@ -111,7 +111,11 @@
 
   &__items { display: flex; flex-direction: column; gap: 16px; }
 
-  &__payment { }
+  &__paymentOptions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
 
   &__paymentOption {
     display: flex;
@@ -120,13 +124,27 @@
     border: 1px solid #ddd;
     border-radius: 6px;
     padding: 14px;
+    cursor: pointer;
 
-    span { font-size: 22px; }
+    input[type="radio"] { margin-top: 3px; accent-color: #f90; }
 
-    strong { display: block; font-size: 14px; margin-bottom: 3px; }
+    strong { display: block; font-size: 14px; margin-bottom: 3px; color: #111; }
     p { font-size: 13px; color: #555; }
 
-    &.selected { border-color: #f90; background: #fffbf2; }
+    &:has(input:checked) { border-color: #f90; background: #fffbf2; }
+
+    &.disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      background: #f7f7f7;
+    }
+  }
+
+  &__paymentCards {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+    img { height: 20px; width: auto; }
   }
 
   &__right { width: 320px; flex-shrink: 0; position: sticky; top: 80px; }
