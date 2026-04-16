@@ -260,7 +260,7 @@ const Home = () => {
                   </div>
                 )}
                 <div className="home__row">
-                  {products.map(product => <ProductCard key={product.id} product={product} />)}
+                  {products.map(product => <ProductCard key={product.id} product={product} isSearchResult={true} />)}
                 </div>
               </>
             )

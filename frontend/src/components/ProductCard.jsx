@@ -8,7 +8,7 @@ import { FaHeart, FaStar } from 'react-icons/fa';
 import { MdTrendingUp } from 'react-icons/md';
 import './ProductCard.scss';
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, isSearchResult = false }) => {
   const { addToCart } = useContext(CartContext);
   const { toggleWishlist, isWishlisted } = useContext(WishlistContext);
 
@@ -104,7 +104,7 @@ const ProductCard = ({ product }) => {
   const isOutOfStock = product.stock === 0;
 
   return (
-    <Link to={`/product/${product.id}`} className="productCard">
+    <Link to={`/product/${product.id}`} className={`productCard ${isSearchResult ? 'searchLayout' : ''}`}>
       {product.isPremium && (
         <div className="productCard__sponsored">
           <span>Sponsored</span>
