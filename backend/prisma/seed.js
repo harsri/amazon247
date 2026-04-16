@@ -1,5 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
+console.log('✅ Prisma imported successfully');
 const prisma = new PrismaClient();
+console.log('✅ PrismaClient initialized');
 
 // Helper function to generate random stock between 5 and 100
 const getRandomStock = () => Math.floor(Math.random() * 96) + 5; // 5-100
@@ -246,5 +248,9 @@ async function main() {
 }
 
 main()
-  .catch((e) => { console.error(e); process.exit(1); })
+  .catch((e) => { 
+    console.error('❌ Seeding error:', e.message);
+    console.error('Full error:', JSON.stringify(e, null, 2));
+    process.exit(1); 
+  })
   .finally(async () => { await prisma.$disconnect(); });
