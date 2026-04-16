@@ -2,19 +2,24 @@ import React, { useEffect, useState, useContext } from 'react';
 import api from '../utils/api';
 import { toast } from 'react-toastify';
 import { AuthContext } from '../context/AuthContext';
-import { FiSearch, FiChevronDown, FiAlertCircle } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
+import { FiSearch, FiChevronDown, FiAlertCircle, FiX } from 'react-icons/fi';
+import { FaStar } from 'react-icons/fa';
 import './Orders.scss';
 
 const STATUS_STEPS = ['PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED'];
 
 const Orders = () => {
   const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState(null);
   const [activeTab, setActiveTab] = useState('orders'); // 'orders', 'buy-again', 'not-shipped'
   const [searchQuery, setSearchQuery] = useState('');
   const [timeFilter, setTimeFilter] = useState('2026'); // Example filter
+  const [reviewModal, setReviewModal] = useState(null); // { productId, productTitle, orderId }
+  const [reviewData, setReviewData] = useState({ rating: 5, comment: '' });
 
   const fetchOrders = async () => {
     try {
@@ -58,6 +63,38 @@ const Orders = () => {
       toast.success('Added to cart!');
     } catch (err) {
       toast.error('Failed to add to cart.');
+    }
+  };
+
+  const handleViewProduct = (productId) => {
+    navigate(`/product/${productId}`);
+  };
+
+  const openReviewModal = (productId, productTitle, orderId) => {
+    setReviewModal({ productId, productTitle, orderId });
+    setReviewData({ rating: 5, comment: '' });
+  };
+
+  const closeReviewModal = () => {
+    setReviewModal(null);
+    setReviewData({ rating: 5, comment: '' });
+  };
+
+  const submitReview = async () => {
+    try {
+      if (!reviewData.comment.trim()) {
+        toast.error('Please write a review comment');
+        return;
+      }
+      await api.post(`/reviews/${reviewModal.productId}`, {
+        rating: reviewData.rating,
+        comment: reviewData.comment
+      });
+      toast.success('Review submitted successfully!');
+      closeReviewModal();
+      fetchOrders();
+    } catch (err) {
+      toast.error(err.response?.data?.error || 'Failed to submit review.');
     }
   };
 
@@ -215,14 +252,15 @@ const Orders = () => {
                               <button className="buy-again-btn" onClick={() => addToCart(item.productId)}>
                                 <span className="icon">↺</span> Buy it again
                               </button>
-                              <button className="secondary-btn">View your item</button>
+                              <button className="secondary-btn" onClick={() => handleViewProduct(item.productId)}>View your item</button>
                             </div>
                           </div>
                         </div>
                         <div className="item-side">
                           <button className="full-btn">Track package</button>
                           {order.status === 'DELIVERED' && <button className="full-btn secondary" onClick={() => handleReturn(order.id)}>Return items</button>}
-                          <button className="full-btn secondary">Leave product review</button>
+                          {['PENDING', 'PROCESSING'].includes(order.status) && <button className="full-btn secondary" onClick={() => handleCancel(order.id)}>Cancel order</button>}
+                          <button className="full-btn secondary" onClick={() => openReviewModal(item.productId, item.product?.title, order.id)}>Leave product review</button>
                         </div>
                       </div>
                     ))}
@@ -237,6 +275,57 @@ const Orders = () => {
           )}
         </div>
       </div>
+
+      {/* Review Modal */}
+      {reviewModal && (
+        <div className="review-modal-overlay" onClick={closeReviewModal}>
+          <div className="review-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="review-modal__header">
+              <h2>Write a Review</h2>
+              <button className="close-btn" onClick={closeReviewModal}>
+                <FiX size={24} />
+              </button>
+            </div>
+
+            <div className="review-modal__body">
+              <p className="product-title">{reviewModal.productTitle}</p>
+
+              <div className="rating-section">
+                <label>Your Rating:</label>
+                <div className="stars-input">
+                  {[1, 2, 3, 4, 5].map(star => (
+                    <button
+                      key={star}
+                      className={`star-btn ${reviewData.rating >= star ? 'active' : ''}`}
+                      onClick={() => setReviewData({ ...reviewData, rating: star })}
+                    >
+                      <FaStar size={28} />
+                    </button>
+                  ))}
+                </div>
+                <span className="rating-text">{reviewData.rating} out of 5 stars</span>
+              </div>
+
+              <div className="comment-section">
+                <label>Your Review:</label>
+                <textarea
+                  placeholder="Share your experience with this product..."
+                  value={reviewData.comment}
+                  onChange={(e) => setReviewData({ ...reviewData, comment: e.target.value })}
+                  maxLength={500}
+                  rows={6}
+                />
+                <span className="char-count">{reviewData.comment.length}/500</span>
+              </div>
+            </div>
+
+            <div className="review-modal__footer">
+              <button className="cancel-btn" onClick={closeReviewModal}>Cancel</button>
+              <button className="submit-btn" onClick={submitReview}>Submit Review</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
