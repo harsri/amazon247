@@ -1,4 +1,4 @@
-# 🛒 Amazon Clone - Full Stack E-Commerce Platform
+# Amazon 247 - Full Stack E-Commerce Platform
 
 > A fully functional, production-ready e-commerce web application built with modern web technologies, inspired by Amazon's user experience and feature set.
 
@@ -11,216 +11,171 @@
 
 ---
 
-## 📑 Table of Contents
+## Table of Contents
 
 1. [Project Overview](#project-overview)
 2. [Live Demo & Links](#live-demo--links)
-3. [Screenshots](#screenshots)
-4. [Features](#features)
-5. [Tech Stack](#tech-stack)
-6. [Folder Structure](#folder-structure)
-7. [Database Schema](#database-schema)
-8. [ER Diagram](#er-diagram)
-9. [API Endpoints](#api-endpoints)
-10. [Environment Variables](#environment-variables)
-11. [Setup Instructions](#setup-instructions)
-12. [Deployment](#deployment)
-13. [Responsive Design](#responsive-design)
-14. [Security Implementation](#security-implementation)
-15. [Assumptions Made](#assumptions-made)
-16. [Future Improvements](#future-improvements)
-17. [Challenges Faced](#challenges-faced)
-18. [Learning Outcomes](#learning-outcomes)
-19. [Contributors](#contributors)
-20. [License](#license)
+3. [Features](#features)
+4. [Tech Stack](#tech-stack)
+5. [Folder Structure](#folder-structure)
+6. [Database Schema](#database-schema)
+7. [ER Diagram](#er-diagram)
+8. [API Endpoints](#api-endpoints)
+9. [Environment Variables](#environment-variables)
+10. [Setup Instructions](#setup-instructions)
+11. [Deployment](#deployment)
+12. [Responsive Design](#responsive-design)
+13. [Security Implementation](#security-implementation)
+14. [Assumptions Made](#assumptions-made)
+15. [Future Improvements](#future-improvements)
+16. [Challenges Faced](#challenges-faced)
+17. [Learning Outcomes](#learning-outcomes)
+18. [Contributors](#contributors)
+19. [License](#license)
 
 ---
 
-## 🎯 Project Overview
+## Project Overview
 
 **Amazon Clone** is a comprehensive, full-stack e-commerce platform that replicates the core features and user experience of Amazon. The application enables users to browse products, manage wishlists, add items to cart, place orders, view order history, and engage with customer support—all through an intuitive, responsive interface.
 
 This project demonstrates expertise in:
-- **Full-stack development** with modern technologies
-- **Database design** and optimization with Prisma ORM
-- **RESTful API** architecture and design patterns
-- **JWT authentication** and secure session management
-- **Responsive UI/UX** using React and SCSS
-- **Production deployment** on cloud platforms
+- Full-stack development with modern technologies
+- Database design and optimization with Prisma ORM
+- RESTful API architecture and design patterns
+- JWT authentication and secure session management
+- Responsive UI/UX using React and SCSS
+- Production deployment on cloud platforms
 
 ---
 
-## 🌐 Live Demo & Links
+## Live Demo & Links
 
 | Component | Link | Status |
 |-----------|------|--------|
-| **Frontend** | `https://amazon247.vercel.app` | ✅ Live |
-| **Backend API** | `https://amazon-clone-backend.onrender.com` | ✅ Live |
-| **GitHub Repository** | `https://github.com/harsri/amazon247` | ✅ Available |
-| **Database** | Railway MySQL | ✅ Configured |
+| **Frontend** | https://amazon247.vercel.app | LIVE |
+| **Backend API** | https://amazon-clone-backend.onrender.com | LIVE |
+| **GitHub Repository** | https://github.com/harsri/amazon247 | AVAILABLE |
+| **Database** | Railway MySQL | CONFIGURED |
 
 ---
 
-## 📷 Screenshots
+## Features
 
-### Home Page
-![Home Page](https://via.placeholder.com/800x600?text=Home+Page)
-*Dynamic carousel, category sections, and featured products*
+### Authentication & Authorization
+- User registration with email verification
+- Secure login with JWT tokens
+- Password hashing with bcryptjs
+- Protected routes and endpoints
+- Session management with token refresh
 
-### Product Listing
-![Product Listing](https://via.placeholder.com/800x600?text=Product+Listing)
-*Search results with filtering, sorting, and category navigation*
+### Product Discovery
+- Advanced product search functionality
+- Category-based filtering
+- Price range filtering
+- Brand filtering
+- Sorting (relevance, price, rating, reviews)
+- Product pagination
+- Real-time search suggestions
 
-### Product Details
-![Product Details](https://via.placeholder.com/800x600?text=Product+Details)
-*Comprehensive product information with ratings, reviews, and add-to-cart*
+### Product Management
+- Detailed product pages with specifications
+- High-quality product images with gallery
+- Product ratings and reviews
+- Stock availability indicators
+- Delivery date estimation
+- Discount percentage display
+- MRP & selling price comparison
 
-### Cart Management
-![Shopping Cart](https://via.placeholder.com/800x600?text=Shopping+Cart)
-*Cart with quantity management, price calculations, and checkout navigation*
+### Cart Functionality
+- Add/remove items from cart
+- Update quantity with stock validation
+- Real-time price calculations
+- Persistent cart storage
+- Cart totals and summaries
+- Out-of-stock handling
 
-### Checkout Process
-![Checkout](https://via.placeholder.com/800x600?text=Checkout+Page)
-*Address selection, payment method choice, and order review*
+### Wishlist Management
+- Add/remove items from wishlist
+- Move to cart functionality
+- Persistent wishlist storage
+- Quick actions from wishlist
+- Wishlist sharing (future)
 
-### Wishlist
-![Wishlist](https://via.placeholder.com/800x600?text=Wishlist+Page)
-*Saved products with move-to-cart functionality*
+### Checkout & Orders
+- Address selection and management
+- Multiple payment method options (COD, Card, UPI)
+- Order summary before placement
+- Order confirmation with email notification
+- Order total with GST calculation
+- Free delivery threshold logic
 
-### Order History
-![Orders](https://via.placeholder.com/800x600?text=Orders+Page)
-*Order tracking, cancellation, and review submission*
+### Order Management
+- Order history with filters
+- Order status tracking (Pending, Processing, Shipped, Delivered)
+- Order cancellation for pending orders
+- Return request functionality
+- Order search by product or order number
+- Time-based filtering
 
-### Authentication
-![Login](https://via.placeholder.com/800x600?text=Login+Page)
-*Secure login and signup with JWT authentication*
+### Reviews & Ratings
+- Product review submission from orders
+- 5-star rating system
+- Review text with character limit
+- Average rating calculation
+- Rating count tracking
+- Social proof display
+
+### Location & Delivery
+- Delivery pincode validation
+- City-based delivery checking
+- FREE delivery on orders above ₹999
+- Delivery date estimation
+- Pincode database management
+- 8+ major Indian cities supported
 
 ### Customer Support
-![Support](https://via.placeholder.com/800x600?text=Support+Page)
-*Customer support tickets and issue tracking*
+- Support ticket creation
+- Issue categorization
+- Ticket status tracking
+- Support history
+- Email notifications for updates
+- Contact form with validation
 
-### Mobile Responsive
-![Mobile View](https://via.placeholder.com/400x800?text=Mobile+Responsive)
-*Optimized mobile experience with touch-friendly interface*
+### Notifications
+- Real-time toast notifications
+- Email notifications for orders
+- Email notifications for support updates
+- Success/error/warning messages
+- Auto-dismiss notifications
 
----
+### Responsive Design
+- Mobile-first approach
+- Tablet optimization
+- Desktop optimization
+- Touch-friendly interface
+- Flexible layouts
+- Adaptive images
 
-## ✨ Features
+### UI/UX Features
+- Loading states with spinners
+- Error handling and user feedback
+- Smooth transitions and animations
+- Consistent design system
+- Accessibility features
+- Dark mode ready (future)
 
-### 🔐 Authentication & Authorization
-- ✅ User registration with email verification
-- ✅ Secure login with JWT tokens
-- ✅ Password hashing with bcryptjs
-- ✅ Protected routes and endpoints
-- ✅ Session management with token refresh
-
-### 🔍 Product Discovery
-- ✅ Advanced product search functionality
-- ✅ Category-based filtering
-- ✅ Price range filtering
-- ✅ Brand filtering
-- ✅ Sorting (relevance, price, rating, reviews)
-- ✅ Product pagination
-- ✅ Real-time search suggestions
-
-### 📦 Product Management
-- ✅ Detailed product pages with specifications
-- ✅ High-quality product images with gallery
-- ✅ Product ratings and reviews
-- ✅ Stock availability indicators
-- ✅ Delivery date estimation
-- ✅ Discount percentage display
-- ✅ MRP & selling price comparison
-
-### 🛒 Cart Functionality
-- ✅ Add/remove items from cart
-- ✅ Update quantity with stock validation
-- ✅ Real-time price calculations
-- ✅ Persistent cart storage
-- ✅ Cart totals and summaries
-- ✅ Out-of-stock handling
-
-### ❤️ Wishlist Management
-- ✅ Add/remove items from wishlist
-- ✅ Move to cart functionality
-- ✅ Persistent wishlist storage
-- ✅ Quick actions from wishlist
-- ✅ Wishlist sharing (future)
-
-### 💳 Checkout & Orders
-- ✅ Address selection and management
-- ✅ Multiple payment method options (COD, Card, UPI)
-- ✅ Order summary before placement
-- ✅ Order confirmation with email notification
-- ✅ Order total with GST calculation
-- ✅ Free delivery threshold logic
-
-### 📋 Order Management
-- ✅ Order history with filters
-- ✅ Order status tracking (Pending, Processing, Shipped, Delivered)
-- ✅ Order cancellation for pending orders
-- ✅ Return request functionality
-- ✅ Order search by product or order number
-- ✅ Time-based filtering
-
-### ⭐ Reviews & Ratings
-- ✅ Product review submission from orders
-- ✅ 5-star rating system
-- ✅ Review text with character limit
-- ✅ Average rating calculation
-- ✅ Rating count tracking
-- ✅ Social proof display
-
-### 📍 Location & Delivery
-- ✅ Delivery pincode validation
-- ✅ City-based delivery checking
-- ✅ FREE delivery on orders above ₹999
-- ✅ Delivery date estimation
-- ✅ Pincode database management
-- ✅ 8+ major Indian cities supported
-
-### 💬 Customer Support
-- ✅ Support ticket creation
-- ✅ Issue categorization
-- ✅ Ticket status tracking
-- ✅ Support history
-- ✅ Email notifications for updates
-- ✅ Contact form with validation
-
-### 🔔 Notifications
-- ✅ Real-time toast notifications
-- ✅ Email notifications for orders
-- ✅ Email notifications for support updates
-- ✅ Success/error/warning messages
-- ✅ Auto-dismiss notifications
-
-### 📱 Responsive Design
-- ✅ Mobile-first approach
-- ✅ Tablet optimization
-- ✅ Desktop optimization
-- ✅ Touch-friendly interface
-- ✅ Flexible layouts
-- ✅ Adaptive images
-
-### 🎨 UI/UX Features
-- ✅ Loading states with spinners
-- ✅ Error handling and user feedback
-- ✅ Smooth transitions and animations
-- ✅ Consistent design system
-- ✅ Accessibility features
-- ✅ Dark mode ready (future)
-
-### ✅ Data Validation & Security
-- ✅ Backend input validation
-- ✅ Frontend form validation
-- ✅ Stock concurrency handling
-- ✅ Duplicate order prevention
-- ✅ Price tampering prevention
-- ✅ URL parameter sanitization
+### Data Validation & Security
+- Backend input validation
+- Frontend form validation
+- Stock concurrency handling
+- Duplicate order prevention
+- Price tampering prevention
+- URL parameter sanitization
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 | Layer | Technology | Version | Purpose |
 |-------|-----------|---------|---------|
@@ -249,28 +204,28 @@ This project demonstrates expertise in:
 
 ---
 
-## 📁 Folder Structure
+## Folder Structure
 
 ```
 amazon247/
-│
-├── 📂 frontend/
-│   ├── 📄 package.json
-│   ├── 📄 vite.config.js
-│   ├── 📄 .env
+|
+├── frontend/
+│   ├── package.json
+│   ├── vite.config.js
+│   ├── .env
 │   ├── index.html
-│   ├── 📂 src/
-│   │   ├── 📄 main.jsx
-│   │   ├── 📄 App.jsx
-│   │   ├── 📄 index.scss
+│   ├── src/
+│   │   ├── main.jsx
+│   │   ├── App.jsx
+│   │   ├── index.scss
 │   │   │
-│   │   ├── 📂 components/
+│   │   ├── components/
 │   │   │   ├── Navbar.jsx         # Navigation header
 │   │   │   ├── Footer.jsx         # Footer component
 │   │   │   ├── ProductCard.jsx    # Reusable product card
 │   │   │   └── ScrollToTop.jsx    # Scroll utility
 │   │   │
-│   │   ├── 📂 pages/
+│   │   ├── pages/
 │   │   │   ├── Home.jsx           # Home page with carousel
 │   │   │   ├── ProductDetails.jsx # Single product view
 │   │   │   ├── Cart.jsx           # Shopping cart
@@ -282,31 +237,31 @@ amazon247/
 │   │   │   ├── Login.jsx          # Authentication
 │   │   │   └── *.scss             # Page styles
 │   │   │
-│   │   ├── 📂 context/
+│   │   ├── context/
 │   │   │   ├── AuthContext.jsx    # User authentication
 │   │   │   ├── CartContext.jsx    # Shopping cart state
 │   │   │   ├── WishlistContext.jsx# Wishlist state
 │   │   │   └── AddressContext.jsx # Address state
 │   │   │
-│   │   ├── 📂 layouts/
+│   │   ├── layouts/
 │   │   │   └── MainLayout.jsx     # Main app layout
 │   │   │
-│   │   ├── 📂 utils/
+│   │   ├── utils/
 │   │   │   └── api.js             # Axios instance
 │   │   │
-│   │   └── 📂 assets/
+│   │   └── assets/
 │   │       ├── images/
 │   │       └── icons/
 │   │
-│   └── 📂 public/
+│   └── public/
 │       └── favicon.ico
 │
-├── 📂 backend/
-│   ├── 📄 package.json
-│   ├── 📄 .env
-│   ├── 📄 index.js               # Server entry point
+├── backend/
+│   ├── package.json
+│   ├── .env
+│   ├── index.js               # Server entry point
 │   │
-│   ├── 📂 controllers/
+│   ├── controllers/
 │   │   ├── auth.controller.js    # Auth logic
 │   │   ├── product.controller.js # Product logic
 │   │   ├── cart.controller.js    # Cart logic
@@ -316,7 +271,7 @@ amazon247/
 │   │   ├── address.controller.js # Address logic
 │   │   └── support.controller.js # Support logic
 │   │
-│   ├── 📂 routes/
+│   ├── routes/
 │   │   ├── auth.routes.js        # Auth endpoints
 │   │   ├── product.routes.js     # Product endpoints
 │   │   ├── cart.routes.js        # Cart endpoints
@@ -326,26 +281,26 @@ amazon247/
 │   │   ├── address.routes.js     # Address endpoints
 │   │   └── support.routes.js     # Support endpoints
 │   │
-│   ├── 📂 middlewares/
+│   ├── middlewares/
 │   │   └── auth.middleware.js    # JWT verification
 │   │
-│   ├── 📂 prisma/
+│   ├── prisma/
 │   │   ├── schema.prisma         # Database schema
 │   │   └── seed.js               # Database seeding
 │   │
-│   ├── 📂 utils/
+│   ├── utils/
 │   │   ├── sendEmail.js          # Email service
 │   │   └── emailTemplates.js     # Email templates
 │   │
-│   └── 📂 config/
+│   └── config/
 │       └── database.js           # DB connection config
 │
-└── 📄 .gitignore
+└── .gitignore
 ```
 
 ---
 
-## 🗄 Database Schema
+## Database Schema
 
 ### Users Table
 **Purpose**: Store user account information and authentication details
@@ -495,7 +450,7 @@ amazon247/
 
 ---
 
-## 📊 ER Diagram
+## ER Diagram
 
 ```mermaid
 erDiagram
@@ -630,85 +585,85 @@ erDiagram
 
 ---
 
-## 🔌 API Endpoints
+## API Endpoints
 
 ### Authentication Routes
 
 | Endpoint | Method | Purpose | Auth |
 |----------|--------|---------|------|
-| `/auth/register` | POST | User registration | ❌ No |
-| `/auth/login` | POST | User login | ❌ No |
-| `/auth/profile` | GET | Get user profile | ✅ Yes |
-| `/auth/logout` | POST | User logout | ✅ Yes |
+| `/auth/register` | POST | User registration | No |
+| `/auth/login` | POST | User login | No |
+| `/auth/profile` | GET | Get user profile | Yes |
+| `/auth/logout` | POST | User logout | Yes |
 
 ### Product Routes
 
 | Endpoint | Method | Purpose | Auth |
 |----------|--------|---------|------|
-| `/products` | GET | Get all products with filters | ❌ No |
-| `/products/:id` | GET | Get single product details | ❌ No |
-| `/products/search` | GET | Search products | ❌ No |
-| `/products/category/:category` | GET | Get products by category | ❌ No |
+| `/products` | GET | Get all products with filters | No |
+| `/products/:id` | GET | Get single product details | No |
+| `/products/search` | GET | Search products | No |
+| `/products/category/:category` | GET | Get products by category | No |
 
 ### Cart Routes
 
 | Endpoint | Method | Purpose | Auth |
 |----------|--------|---------|------|
-| `/cart` | GET | Get cart items | ✅ Yes |
-| `/cart` | POST | Add item to cart | ✅ Yes |
-| `/cart/:itemId` | PUT | Update cart item quantity | ✅ Yes |
-| `/cart/:itemId` | DELETE | Remove item from cart | ✅ Yes |
-| `/cart/clear` | DELETE | Clear entire cart | ✅ Yes |
+| `/cart` | GET | Get cart items | Yes |
+| `/cart` | POST | Add item to cart | Yes |
+| `/cart/:itemId` | PUT | Update cart item quantity | Yes |
+| `/cart/:itemId` | DELETE | Remove item from cart | Yes |
+| `/cart/clear` | DELETE | Clear entire cart | Yes |
 
 ### Wishlist Routes
 
 | Endpoint | Method | Purpose | Auth |
 |----------|--------|---------|------|
-| `/wishlist` | GET | Get wishlist items | ✅ Yes |
-| `/wishlist` | POST | Add to wishlist | ✅ Yes |
-| `/wishlist/:itemId` | DELETE | Remove from wishlist | ✅ Yes |
+| `/wishlist` | GET | Get wishlist items | Yes |
+| `/wishlist` | POST | Add to wishlist | Yes |
+| `/wishlist/:itemId` | DELETE | Remove from wishlist | Yes |
 
 ### Order Routes
 
 | Endpoint | Method | Purpose | Auth |
 |----------|--------|---------|------|
-| `/orders` | POST | Place new order | ✅ Yes |
-| `/orders` | GET | Get user orders | ✅ Yes |
-| `/orders/:id` | GET | Get single order details | ✅ Yes |
-| `/orders/:id/cancel` | PUT | Cancel order | ✅ Yes |
-| `/orders/:id/return` | PUT | Request return | ✅ Yes |
+| `/orders` | POST | Place new order | Yes |
+| `/orders` | GET | Get user orders | Yes |
+| `/orders/:id` | GET | Get single order details | Yes |
+| `/orders/:id/cancel` | PUT | Cancel order | Yes |
+| `/orders/:id/return` | PUT | Request return | Yes |
 
 ### Review Routes
 
 | Endpoint | Method | Purpose | Auth |
 |----------|--------|---------|------|
-| `/reviews/:productId` | GET | Get product reviews | ❌ No |
-| `/reviews/:productId` | POST | Submit review | ✅ Yes |
-| `/reviews/:id` | PUT | Update review | ✅ Yes |
-| `/reviews/:id` | DELETE | Delete review | ✅ Yes |
+| `/reviews/:productId` | GET | Get product reviews | No |
+| `/reviews/:productId` | POST | Submit review | Yes |
+| `/reviews/:id` | PUT | Update review | Yes |
+| `/reviews/:id` | DELETE | Delete review | Yes |
 
 ### Address Routes
 
 | Endpoint | Method | Purpose | Auth |
 |----------|--------|---------|------|
-| `/addresses` | GET | Get user addresses | ✅ Yes |
-| `/addresses` | POST | Add new address | ✅ Yes |
-| `/addresses/:id` | PUT | Update address | ✅ Yes |
-| `/addresses/:id` | DELETE | Delete address | ✅ Yes |
-| `/addresses/:id/default` | PUT | Set default address | ✅ Yes |
+| `/addresses` | GET | Get user addresses | Yes |
+| `/addresses` | POST | Add new address | Yes |
+| `/addresses/:id` | PUT | Update address | Yes |
+| `/addresses/:id` | DELETE | Delete address | Yes |
+| `/addresses/:id/default` | PUT | Set default address | Yes |
 
 ### Support Routes
 
 | Endpoint | Method | Purpose | Auth |
 |----------|--------|---------|------|
-| `/support` | GET | Get support tickets | ✅ Yes |
-| `/support` | POST | Create support ticket | ✅ Yes |
-| `/support/:id` | GET | Get ticket details | ✅ Yes |
-| `/support/:id` | PUT | Update ticket | ✅ Yes |
+| `/support` | GET | Get support tickets | Yes |
+| `/support` | POST | Create support ticket | Yes |
+| `/support/:id` | GET | Get ticket details | Yes |
+| `/support/:id` | PUT | Update ticket | Yes |
 
 ---
 
-## 🔧 Environment Variables
+## Environment Variables
 
 ### Backend `.env` Configuration
 
@@ -752,15 +707,15 @@ REACT_APP_DEBUG_MODE=false
 
 ---
 
-## 📦 Setup Instructions
+## Setup Instructions
 
 ### Prerequisites
 
 Ensure you have installed:
-- **Node.js** v18.0.0 or higher
-- **npm** v9.0.0 or higher
-- **MySQL** v8.0 or higher (local or cloud)
-- **Git** v2.0 or higher
+- Node.js v18.0.0 or higher
+- npm v9.0.0 or higher
+- MySQL v8.0 or higher (local or cloud)
+- Git v2.0 or higher
 
 ### Backend Setup
 
@@ -812,52 +767,50 @@ npm run build
 
 ### Database Setup
 
-1. **Create MySQL Database**:
+1. Create MySQL Database:
 ```sql
 CREATE DATABASE amazon_clone;
 ```
 
-2. **Configure Prisma**:
-   - Update `DATABASE_URL` in backend `.env`
-   - Run: `npx prisma db push`
+2. Configure Prisma:
+   - Update DATABASE_URL in backend .env
+   - Run: npx prisma db push
 
-3. **Seed Sample Data**:
+3. Seed Sample Data:
 ```bash
 npx prisma db seed
 ```
 
 ---
 
-## 🚀 Deployment
+## Deployment
 
 ### Frontend Deployment (Vercel)
 
-1. **Connect Repository**:
-   - Go to [Vercel Dashboard](https://vercel.com)
+1. Connect Repository:
+   - Go to Vercel Dashboard
    - Click "Add New Project"
    - Import your GitHub repository
 
-2. **Configure Environment Variables**:
+2. Configure Environment Variables:
    - Settings → Environment Variables
-   - Add `REACT_APP_API_BASE_URL`
+   - Add REACT_APP_API_BASE_URL
 
-3. **Deploy**:
-   - Select `frontend` as root directory
-   - Set build command: `npm run build`
-   - Output directory: `dist`
+3. Deploy:
+   - Select frontend as root directory
+   - Set build command: npm run build
+   - Output directory: dist
    - Deploy
 
 ### Backend Deployment (Render/Railway)
 
-**Using Render**:
-
+Using Render:
 1. Connect GitHub repository to Render
 2. Create Web Service
 3. Set environment variables
 4. Deploy
 
-**Using Railway**:
-
+Using Railway:
 1. Connect GitHub repository to Railway
 2. Create new service
 3. Add environment variables
@@ -867,24 +820,24 @@ npx prisma db seed
 ### Database Deployment (Railway/Heroku)
 
 1. Create new MySQL database on Railway
-2. Get `DATABASE_URL`
+2. Get DATABASE_URL
 3. Add to backend environment variables
-4. Run migrations: `npx prisma migrate deploy`
+4. Run migrations: npx prisma migrate deploy
 
 ### Post-Deployment Checklist
 
-- [ ] Update `CLIENT_URL` in backend environment
-- [ ] Update `REACT_APP_API_BASE_URL` in frontend environment
-- [ ] Test all API endpoints
-- [ ] Verify email notifications
-- [ ] Test checkout flow
-- [ ] Monitor error logs
-- [ ] Enable HTTPS
-- [ ] Set up domain mapping
+- Update CLIENT_URL in backend environment
+- Update REACT_APP_API_BASE_URL in frontend environment
+- Test all API endpoints
+- Verify email notifications
+- Test checkout flow
+- Monitor error logs
+- Enable HTTPS
+- Set up domain mapping
 
 ---
 
-## 📱 Responsive Design
+## Responsive Design
 
 ### Design Philosophy
 - **Mobile-First Approach**: Start with mobile, enhance for larger screens
@@ -933,75 +886,65 @@ npx prisma db seed
 
 ---
 
-## 🔒 Security Implementation
+## Security Implementation
 
 ### Authentication & Authorization
 
-```javascript
-// JWT-based authentication with 7-day expiry
-// Tokens stored in httpOnly cookies (frontend)
-// Protected routes require valid JWT
-```
+JWT-based authentication with 7-day expiry
+Tokens stored in httpOnly cookies (frontend)
+Protected routes require valid JWT
 
-**Password Security**:
+Password Security:
 - Bcryptjs hashing with 10-round salt
 - No plaintext passwords in database
 - Password reset via email verification
 
-**Protected Endpoints**:
+Protected Endpoints:
 - Authentication middleware on all user-specific routes
 - Token validation on each request
 - Automatic logout on token expiry
 
 ### Data Protection
 
-```javascript
-// Input Validation
+Input Validation:
 - Email format validation
 - Password strength requirements
 - Phone number format checking
 - Pincode validation
 
-// Backend Validation
+Backend Validation:
 - Prisma schema validation
 - SQL injection prevention via ORM
 - XSS prevention with content sanitization
-```
 
 ### Stock & Concurrency
 
-```javascript
-// Prevent overselling
+Prevent overselling:
 - Check stock before adding to cart
 - Lock stock during order placement
 - Restore stock on order cancellation
 - Transaction handling for atomic operations
-```
 
 ### API Security
 
-```javascript
-// REST API Best Practices
+REST API Best Practices:
 - CORS configuration to allow only frontend domain
 - Rate limiting on sensitive endpoints (future)
 - Request logging and monitoring
 - Error responses without sensitive info
 - HTTPS required on production
-```
 
 ### Environment Variable Protection
 
-```javascript
-// Secure Configuration
+Secure Configuration:
 - .env files in .gitignore
 - Separate envs for dev/staging/production
 - JWT_SECRET with minimum 32 characters
 - Database credentials encrypted
-```
 
 ---
 
-## 📋 Assumptions Made
+## Assumptions Made
 
 ### Business Logic
 
@@ -1061,69 +1004,69 @@ npx prisma db seed
 
 ---
 
-## 🎯 Future Improvements
+## Future Improvements
 
 ### Payment Integration
-- [ ] Razorpay payment gateway
-- [ ] Multiple payment methods (Wallets, UPI)
-- [ ] Payment refund handling
-- [ ] Transaction history and receipts
+- Razorpay payment gateway
+- Multiple payment methods (Wallets, UPI)
+- Payment refund handling
+- Transaction history and receipts
 
 ### Authentication Enhancements
-- [ ] Google OAuth integration
-- [ ] OTP-based login via SMS
-- [ ] Two-factor authentication (2FA)
-- [ ] Social media login (Facebook, Twitter)
-- [ ] Biometric authentication
+- Google OAuth integration
+- OTP-based login via SMS
+- Two-factor authentication (2FA)
+- Social media login (Facebook, Twitter)
+- Biometric authentication
 
 ### Customer Experience
-- [ ] AI-powered product recommendations
-- [ ] Smart search with filters
-- [ ] Voice search functionality
-- [ ] Product comparison tool
-- [ ] Virtual try-on (AR for certain products)
+- AI-powered product recommendations
+- Smart search with filters
+- Voice search functionality
+- Product comparison tool
+- Virtual try-on (AR for certain products)
 
 ### Admin Dashboard
-- [ ] Admin panel for inventory management
-- [ ] Sales analytics and reports
-- [ ] User management system
-- [ ] Order fulfillment dashboard
-- [ ] Promotional campaign tools
+- Admin panel for inventory management
+- Sales analytics and reports
+- User management system
+- Order fulfillment dashboard
+- Promotional campaign tools
 
 ### Advanced Features
-- [ ] Real-time order tracking with GPS
-- [ ] Live customer support chat
-- [ ] Coupon and discount system
-- [ ] Loyalty points program
-- [ ] Subscription boxes
-- [ ] Multi-vendor marketplace
-- [ ] Seller dashboard
+- Real-time order tracking with GPS
+- Live customer support chat
+- Coupon and discount system
+- Loyalty points program
+- Subscription boxes
+- Multi-vendor marketplace
+- Seller dashboard
 
 ### Performance Optimization
-- [ ] Image optimization with CDN
-- [ ] Database query optimization
-- [ ] Caching strategies (Redis)
-- [ ] Lazy loading implementation
-- [ ] Code splitting and bundling optimization
+- Image optimization with CDN
+- Database query optimization
+- Caching strategies (Redis)
+- Lazy loading implementation
+- Code splitting and bundling optimization
 
 ### DevOps & Infrastructure
-- [ ] Docker containerization
-- [ ] Kubernetes orchestration
-- [ ] Zero-downtime deployments
-- [ ] Database backups and recovery
-- [ ] Monitoring and alerting
-- [ ] CI/CD pipeline automation
+- Docker containerization
+- Kubernetes orchestration
+- Zero-downtime deployments
+- Database backups and recovery
+- Monitoring and alerting
+- CI/CD pipeline automation
 
 ### Mobile Application
-- [ ] Native iOS app
-- [ ] Native Android app
-- [ ] Cross-platform React Native
-- [ ] Push notifications
-- [ ] Offline mode
+- Native iOS app
+- Native Android app
+- Cross-platform React Native
+- Push notifications
+- Offline mode
 
 ---
 
-## 🚧 Challenges Faced
+## Challenges Faced
 
 ### Database & ORM
 
@@ -1189,60 +1132,60 @@ npx prisma db seed
 
 ---
 
-## 📚 Learning Outcomes
+## Learning Outcomes
 
 ### Full-Stack Development
 
-✅ **Comprehensive understanding** of client-server architecture
-✅ **RESTful API design** principles and best practices
-✅ **End-to-end feature development** from mockup to production
-✅ **Deployment pipeline** understanding and execution
+- Comprehensive understanding of client-server architecture
+- RESTful API design principles and best practices
+- End-to-end feature development from mockup to production
+- Deployment pipeline understanding and execution
 
 ### Frontend Development
 
-✅ **React patterns**: Hooks, Context API, component composition
-✅ **Responsive design**: Mobile-first approach, breakpoints, CSS Grid/Flexbox
-✅ **State management**: Complex state handling without Redux
-✅ **Performance optimization**: Code splitting, lazy loading, memoization
+- React patterns: Hooks, Context API, component composition
+- Responsive design: Mobile-first approach, breakpoints, CSS Grid/Flexbox
+- State management: Complex state handling without Redux
+- Performance optimization: Code splitting, lazy loading, memoization
 
 ### Backend Development
 
-✅ **Express.js framework**: Routing, middleware, error handling
-✅ **Prisma ORM**: Schema design, relationships, query optimization
-✅ **Authentication**: JWT implementation, password hashing, middleware
-✅ **Email service**: Nodemailer integration and email templating
+- Express.js framework: Routing, middleware, error handling
+- Prisma ORM: Schema design, relationships, query optimization
+- Authentication: JWT implementation, password hashing, middleware
+- Email service: Nodemailer integration and email templating
 
 ### Database Design
 
-✅ **Relational database** schema design principles
-✅ **Normalization**: BCNF, avoiding anomalies, data integrity
-✅ **Indexing**: Performance optimization, query analysis
-✅ **Constraints**: Foreign keys, unique keys, check constraints
+- Relational database schema design principles
+- Normalization: BCNF, avoiding anomalies, data integrity
+- Indexing: Performance optimization, query analysis
+- Constraints: Foreign keys, unique keys, check constraints
 
 ### DevOps & Deployment
 
-✅ **Platform deployment**: Vercel (frontend), Render/Railway (backend)
-✅ **Environment management**: .env configuration, secrets handling
-✅ **CI/CD concepts**: Automated testing and deployment
-✅ **Monitoring**: Error logging, performance metrics
+- Platform deployment: Vercel (frontend), Render/Railway (backend)
+- Environment management: .env configuration, secrets handling
+- CI/CD concepts: Automated testing and deployment
+- Monitoring: Error logging, performance metrics
 
 ### Best Practices
 
-✅ **Code organization**: Modular structure, separation of concerns
-✅ **Error handling**: Graceful error messages, fallback mechanisms
-✅ **Security**: Input validation, password hashing, JWT auth
-✅ **Testing**: Manual testing strategies, edge case handling
+- Code organization: Modular structure, separation of concerns
+- Error handling: Graceful error messages, fallback mechanisms
+- Security: Input validation, password hashing, JWT auth
+- Testing: Manual testing strategies, edge case handling
 
 ### Soft Skills
 
-✅ **Problem-solving**: Debugging complex issues, finding solutions
-✅ **Documentation**: Clear code comments, README maintenance
-✅ **Time management**: Project planning, deadline management
-✅ **Research**: Learning new technologies, RTFM (Read The Fine Manual)
+- Problem-solving: Debugging complex issues, finding solutions
+- Documentation: Clear code comments, README maintenance
+- Time management: Project planning, deadline management
+- Research: Learning new technologies, RTFM (Read The Fine Manual)
 
 ---
 
-## 👥 Contributors
+## Contributors
 
 ### Development Team
 
@@ -1251,22 +1194,23 @@ npx prisma db seed
 | **Harshit Srivastava** | Full-Stack Developer | [@harsri](https://github.com/harsri) |
 
 ### Contributors
-- Grateful to the open-source community for amazing tools and libraries
-- Special thanks to React, Node.js, and Prisma teams
+
+Grateful to the open-source community for amazing tools and libraries
+Special thanks to React, Node.js, and Prisma teams
 
 ### How to Contribute
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
+2. Create a feature branch (git checkout -b feature/amazing-feature)
+3. Commit your changes (git commit -m 'Add amazing feature')
+4. Push to the branch (git push origin feature/amazing-feature)
 5. Open a Pull Request
 
 ---
 
-## 📄 License
+## License
 
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License** - see the LICENSE file for details.
 
 ### MIT License Summary
 
@@ -1285,51 +1229,51 @@ copies or substantial portions of the Software.
 ```
 
 **You are free to**:
-- ✅ Use commercially
-- ✅ Modify the code
-- ✅ Distribute
-- ✅ Use privately
+- Use commercially
+- Modify the code
+- Distribute
+- Use privately
 
 **With conditions**:
-- ❗ License notice required
-- ❗ No liability accepted
+- License notice required
+- No liability accepted
 
 ---
 
-## 📞 Support & Contact
+## Support & Contact
 
 For questions, suggestions, or support:
 
-- **GitHub Issues**: [Report bugs](https://github.com/harsri/amazon247/issues)
-- **Email**: harshit@example.com
-- **LinkedIn**: [@harsrivastava](https://linkedin.com/in/harsrivastava)
+- GitHub Issues: https://github.com/harsri/amazon247/issues
+- Email: harshit@example.com
+- LinkedIn: https://linkedin.com/in/harsrivastava
 
 ---
 
-## ⭐ Show Your Support
+## Show Your Support
 
 If you found this project helpful, please consider:
 
-- ⭐ Starring the repository
-- 🔗 Sharing with your network
-- 💬 Providing feedback
-- 🤝 Contributing improvements
+- Starring the repository
+- Sharing with your network
+- Providing feedback
+- Contributing improvements
 
 ---
 
-**Made with ❤️ by Harshit Srivastava**
+Made with care by Harshit Srivastava
 
 *Last Updated: April 2024*
 
 ---
 
-## 🔗 Quick Links
+## Quick Links
 
-- [Frontend Repository](https://github.com/harsri/amazon247)
-- [Live Application](https://amazon247.vercel.app)
-- [API Documentation](https://amazon-clone-backend.onrender.com/api/docs)
-- [Issue Tracker](https://github.com/harsri/amazon247/issues)
-- [Project Roadmap](https://github.com/harsri/amazon247/projects)
+- Frontend Repository: https://github.com/harsri/amazon247
+- Live Application: https://amazon247.vercel.app
+- API Documentation: https://amazon-clone-backend.onrender.com/api/docs
+- Issue Tracker: https://github.com/harsri/amazon247/issues
+- Project Roadmap: https://github.com/harsri/amazon247/projects
 
 ---
 
